@@ -1,23 +1,24 @@
 cmake_minimum_required(VERSION 3.19)
-project(project-02-lut VERSION 1.0.0)
+project(project-03-flip-flop VERSION 1.0.0)
 
 find_package(verilator HINTS $ENV{VERILATOR_ROOT})
 
-add_library(${PROJECT_NAME}-library STATIC)
+add_library(${PROJECT_NAME}-library STATIC
+    Clocked_Logic_Intro.hpp)
 target_compile_features(${PROJECT_NAME}-library PUBLIC cxx_std_11)
 target_include_directories(${PROJECT_NAME}-library PUBLIC . ../verilatest)
 
 set(VERILATEST_TARGET ${PROJECT_NAME}-library)
 add_subdirectory(../verilatest verilatest)
 
-verilate(${PROJECT_NAME}-library SOURCES And_Gate_Project.v TRACE)
+verilate(${PROJECT_NAME}-library SOURCES Clocked_Logic_Intro_tb.v Clocked_Logic_Intro.v TRACE)
 
 find_package(Catch2 REQUIRED)
 include(CTest)
 include(Catch)
 
 add_executable(${PROJECT_NAME}-tests
-    test-lut.cpp
+    test-flip-flop.cpp
     ../common/test-common.hpp
     ../common/test-main.cpp
 )

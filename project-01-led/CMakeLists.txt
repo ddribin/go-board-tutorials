@@ -12,9 +12,6 @@ add_subdirectory(../verilatest verilatest)
 
 verilate(${PROJECT_NAME}-library SOURCES Switches_To_LEDs.v TRACE)
 
-# add_executable(clock_divider main.cpp)
-# target_link_libraries(clock_divider PRIVATE lib_clock_divider)
-
 find_package(Catch2 REQUIRED)
 include(CTest)
 include(Catch)
@@ -28,11 +25,4 @@ add_executable(${PROJECT_NAME}-tests
 target_include_directories(${PROJECT_NAME}-tests PRIVATE ../common)
 target_link_libraries(${PROJECT_NAME}-tests PRIVATE
     ${PROJECT_NAME}-library Catch2::Catch2)
-catch_discover_tests(${PROJECT_NAME}-tests)    
-
-# We check if this is the main file
-# you don't usually want users of your library to
-# execute tests as part of their build
-# if (${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
-#     add_subdirectory(tests)
-# endif ()
+catch_discover_tests(${PROJECT_NAME}-tests)

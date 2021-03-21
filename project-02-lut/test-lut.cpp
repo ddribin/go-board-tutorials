@@ -1,7 +1,7 @@
 #include "test-common.hpp"
 #include "VAnd_Gate_Project.h"
 
-TEST_CASE("Initial state", "[project-02")
+TEST_CASE("[lut] Initial state", "[project-02")
 {
     VAnd_Gate_Project core;
 
@@ -10,7 +10,7 @@ TEST_CASE("Initial state", "[project-02")
     REQUIRE(core.o_LED_1 == 0);
 }
 
-TEST_CASE("Only switch 1 on", "[project-02")
+TEST_CASE("[lut] Only switch 1 on", "[project-02]")
 {
     VAnd_Gate_Project core;
 
@@ -20,7 +20,7 @@ TEST_CASE("Only switch 1 on", "[project-02")
     REQUIRE(core.o_LED_1 == 0);
 }
 
-TEST_CASE("Only switch 2 on", "[project-02")
+TEST_CASE("[lut] Only switch 2 on", "[project-02]")
 {
     VAnd_Gate_Project core;
 
@@ -30,7 +30,7 @@ TEST_CASE("Only switch 2 on", "[project-02")
     REQUIRE(core.o_LED_1 == 0);
 }
 
-TEST_CASE("Both switches on", "[project-02")
+TEST_CASE("[lut] Both switches on", "[project-02]")
 {
     VAnd_Gate_Project core;
 

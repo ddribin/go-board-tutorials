@@ -2,7 +2,7 @@
 #include "test-common.hpp"
 #include "VSwitches_To_LEDs.h"
 
-TEST_CASE("Initial state", "[project-01")
+TEST_CASE("[led] Initial state", "[project-01]")
 {
     VSwitches_To_LEDs core;
 
@@ -14,7 +14,7 @@ TEST_CASE("Initial state", "[project-01")
     REQUIRE(core.o_LED_4 == 0);
 }
 
-TEST_CASE("Test change switches", "[project-01")
+TEST_CASE("[led] Test change switches", "[project-01]")
 {
     VSwitches_To_LEDs core;
     core.i_Switch_1 = 1;
