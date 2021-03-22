@@ -1,7 +1,7 @@
 #include "test-common.hpp"
-#include "VClocked_Logic_Intro_tb.h"
+#include "VClocked_Logic_tb.h"
 
-using UUT = VClocked_Logic_Intro_tb;
+using UUT = VClocked_Logic_tb;
 
 static const uint8_t SwitchDown = 1;
 static const uint8_t SwitchUp = 0;

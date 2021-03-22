@@ -1,4 +1,4 @@
-module Clocked_Logic_Intro(
+module Clocked_Logic(
     input i_Clk,
     input i_Switch_1,
     output o_LED_1);
