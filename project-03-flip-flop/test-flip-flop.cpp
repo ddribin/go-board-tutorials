@@ -12,10 +12,12 @@ struct ClockedLogicFixture {
     using SignalPublisher8 = SignalPublisher<uint8_t, UUT>;
     using SignalObserver8 = SignalObserver<uint8_t, UUT>;
     TestBench<UUT> bench;
+    UUT& core;
     SignalPublisher8 switchInput;
     SignalObserver8 ledOutput;
 
     ClockedLogicFixture() :
+        core(bench.core()),
         switchInput(&UUT::i_Switch_1),
         ledOutput(&UUT::o_LED_1)
     {
@@ -25,12 +27,8 @@ struct ClockedLogicFixture {
 };
 using Fixture = ClockedLogicFixture;
 
-TEST_CASE("[flip-flop] Initial state", "[project-03]")
+TEST_CASE_METHOD(Fixture, "[flip-flop] Initial state", "[project-03]")
 {
-    UUT core;
-
-    core.eval();
-
     REQUIRE(core.o_LED_1 == LedOff);
 }
 
