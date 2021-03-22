@@ -13,16 +13,16 @@ struct ClockedLogicFixture {
     using SignalObserver8 = SignalObserver<uint8_t, UUT>;
     TestBench<UUT> bench;
     UUT& core;
-    SignalPublisher8 switchInput;
-    SignalObserver8 ledOutput;
+    SignalPublisher8 switch1;
+    SignalObserver8 led1;
 
     ClockedLogicFixture() :
         core(bench.core()),
-        switchInput(&UUT::i_Switch_1),
-        ledOutput(&UUT::o_LED_1)
+        switch1(&UUT::i_Switch_1),
+        led1(&UUT::o_LED_1)
     {
-        bench.addPreHook(switchInput.hook());
-        bench.addPostHook(ledOutput.hook());
+        bench.addPreHook(switch1.hook());
+        bench.addPostHook(led1.hook());
     }
 };
 using Fixture = ClockedLogicFixture;
@@ -34,27 +34,27 @@ TEST_CASE_METHOD(Fixture, "[flip-flop] Initial state", "[project-03]")
 
 TEST_CASE_METHOD(Fixture, "[flip-flop] Switch down", "[project-03]")
 {
-    switchInput.addInputs({{1, SwitchDown}});
+    switch1.addInputs({{1, SwitchDown}});
 
     bench.tick(10);
 
     ChangeVector8 expected;
-    REQUIRE(ledOutput.changes() == expected);
+    REQUIRE(led1.changes() == expected);
 }
 
 TEST_CASE_METHOD(Fixture, "[flip-flop] Switch down then up", "[project-03]")
 {
-    switchInput.addInputs({{1, SwitchDown}, {2, SwitchUp}});
+    switch1.addInputs({{1, SwitchDown}, {2, SwitchUp}});
 
     bench.tick(10);
 
     ChangeVector8 expected{{2, LedOn}};
-    REQUIRE(ledOutput.changes() == expected);
+    REQUIRE(led1.changes() == expected);
 }
 
 TEST_CASE_METHOD(Fixture, "[flip-flop] Switch toggle 3 times", "[project-03]")
 {
-    switchInput.addInputs({
+    switch1.addInputs({
         {1, SwitchDown}, {2,  SwitchUp},
         {4, SwitchDown}, {6,  SwitchUp},
         {8, SwitchDown}, {11, SwitchUp}
@@ -63,5 +63,5 @@ TEST_CASE_METHOD(Fixture, "[flip-flop] Switch toggle 3 times", "[project-03]")
     bench.tick(15);
 
     ChangeVector8 expected{{2, LedOn}, {6, LedOff}, {11, LedOn}};
-    REQUIRE(ledOutput.changes() == expected);
+    REQUIRE(led1.changes() == expected);
 }
