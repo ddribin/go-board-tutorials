@@ -3,8 +3,7 @@ project(project-03-flip-flop VERSION 1.0.0)
 
 find_package(verilator HINTS $ENV{VERILATOR_ROOT})
 
-add_library(${PROJECT_NAME}-library STATIC
-    Clocked_Logic_Intro.hpp)
+add_library(${PROJECT_NAME}-library STATIC)
 target_compile_features(${PROJECT_NAME}-library PUBLIC cxx_std_11)
 target_include_directories(${PROJECT_NAME}-library PUBLIC . ../verilatest)
 
