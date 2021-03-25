@@ -10,7 +10,7 @@ target_include_directories(${PROJECT_NAME}-library PUBLIC . ../verilatest)
 set(VERILATEST_TARGET ${PROJECT_NAME}-library)
 add_subdirectory(../verilatest verilatest)
 
-verilate(${PROJECT_NAME}-library SOURCES Clocked_Logic_tb.v Clocked_Logic.v TRACE)
+verilate(${PROJECT_NAME}-library SOURCES Clocked_Logic.v TRACE)
 
 find_package(Catch2 REQUIRED)
 include(CTest)

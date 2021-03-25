@@ -1,7 +1,13 @@
 #include "test-common.hpp"
-#include "VClocked_Logic_tb.h"
+#include "VClocked_Logic.h"
 
-using UUT = VClocked_Logic_tb;
+
+struct VClocked_Logic_Adapter : public VClocked_Logic
+{
+    void setClock(uint64_t clock) { i_Clk = clock; }
+};
+
+using UUT = VClocked_Logic_Adapter;
 
 static const uint8_t SwitchDown = 1;
 static const uint8_t SwitchUp = 0;
