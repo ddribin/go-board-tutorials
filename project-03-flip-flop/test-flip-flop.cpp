@@ -21,8 +21,8 @@ struct ClockedLogicFixture {
         switch1(&UUT::i_Switch_1),
         led1(&UUT::o_LED_1)
     {
-        bench.addPreHook(switch1.hook());
-        bench.addPostHook(led1.hook());
+        bench.addInput(switch1);
+        bench.addOutput(led1);
     }
 };
 using Fixture = ClockedLogicFixture;
