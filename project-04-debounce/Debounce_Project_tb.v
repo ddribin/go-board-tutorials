@@ -6,8 +6,8 @@ module Debounce_Project_tb
     // Override the limit for testing
     Debounce_Project_Top #(.c_DEBOUNCE_LIMIT(10))
     Debounce_Inst
-    (.i_Clk(i_Clk), 
-    .i_Switch_1(i_Switch_1),
-    .o_LED_1(o_LED_1));
+    (.i_Clk,
+    .i_Switch_1,
+    .o_LED_1);
     
 endmodule
