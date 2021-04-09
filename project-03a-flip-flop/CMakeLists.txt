@@ -11,6 +11,7 @@ set(VERILATEST_TARGET ${PROJECT_NAME}-library)
 add_subdirectory(../verilatest verilatest)
 
 verilate(${PROJECT_NAME}-library SOURCES Clocked_Logic.v TRACE)
+verilate(${PROJECT_NAME}-library SOURCES Switch.v TRACE)
 
 find_package(Catch2 REQUIRED)
 include(CTest)

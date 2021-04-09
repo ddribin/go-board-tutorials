@@ -1,13 +1,13 @@
 #include "test-common.hpp"
-#include "VClocked_Logic.h"
+#include "VSwitch.h"
 
 
-struct VClocked_Logic_Adapter : public VClocked_Logic
+struct VSwitch_Adapter : public VSwitch
 {
     void setClock(uint64_t clock) { i_Clk = clock; }
 };
 
-using UUT = VClocked_Logic_Adapter;
+using UUT = VSwitch_Adapter;
 
 static const uint8_t SwitchDown = 1;
 static const uint8_t SwitchUp = 0;
@@ -24,8 +24,8 @@ struct ClockedLogicFixture {
 
     ClockedLogicFixture() :
         core(bench.core()),
-        switch1(&UUT::i_Switch_1),
-        led1(&UUT::o_LED_1)
+        switch1(&UUT::i_Switch),
+        led1(&UUT::o_LED)
     {
         bench.addInput(switch1);
         bench.addOutput(led1);
@@ -35,7 +35,7 @@ using Fixture = ClockedLogicFixture;
 
 TEST_CASE_METHOD(Fixture, "[flip-flop2] Initial state", "[project-03]")
 {
-    REQUIRE(core.o_LED_1 == LedOff);
+    REQUIRE(core.o_LED == LedOff);
 }
 
 TEST_CASE_METHOD(Fixture, "[flip-flop2] Switch down", "[project-03]")
