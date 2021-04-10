@@ -1,0 +1,39 @@
+ +-A-+
+ |   |
+ F   B
+ |   |
+ +-G-+  Seven Segment Display (7SD)
+ |   |
+ E   C
+ |   |
+ +-D-+
+
+
+ 0 .. 1 .. 2 .. 3 .. 4 .. 5 .. 6 .. 7 .. 8 .. 9
+ _         _    _         _         _    _    _
+| |    |   _|   _|  |_|  |_   |_     |  |_|  |_|
+|_|    |  |_    _|    |   _|  |_|    |  |_|    |
+
+ A .. b .. C .. d .. E .. F     Segments
+ _         _         _    _         A
+|_|  |_   |     _|  |_   |_        FGB
+| |  |_|  |_   |_|  |_   |         EDC
+
+
+ 0 = A | B | C | D | E | F
+ 1 = B | C
+ 2 = A | B | G | E | D
+ 3 = A | B | G | D
+ 4 = F | B | G | C
+ 5 = A | F | G | C | D
+ 6 = F | E | D | C | G
+ 7 = A | B | C
+ 8 = A | B | C | D | E | F | G
+ 9 = A | F | G | B | C
+
+ A = A | F | B | G | E | C
+ B = F | E | G | C | D
+ C = A | F | E | D
+ D = B | G | E | D | C
+ E = A | F | G | E | D
+ F = A | F | G | E
