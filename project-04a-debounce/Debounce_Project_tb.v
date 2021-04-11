@@ -10,6 +10,7 @@ module Debounce_Project_tb
     .i_Switch_1,
     .o_LED_1,
     .i_Switch_3(1),
-    .o_LED_3());
+    .o_LED_3(),
+    .io_PMOD_1());
     
 endmodule
