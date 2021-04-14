@@ -4,6 +4,8 @@
 
 add_file -verilog -lib work "../Count_7SD_Top.v" 
 add_file -verilog -lib work "../Nibble_To_7SD.v" 
+add_file -verilog -lib work "../Debounce_Switch.v" 
+add_file -verilog -lib work "../Bit_Counter.v" 
 #implementation: "count_7sd_Implmnt"
 impl -add count_7sd_Implmnt -type fpga
 

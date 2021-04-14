@@ -1,8 +1,17 @@
 module Count_7SD_Top (
   input i_Clk,
+  input i_Switch_1,
+  input i_Switch_2,
+  input i_Switch_3,
+  input i_Switch_4,
+
   output io_PMOD_1,
   output io_PMOD_2,
   output io_PMOD_3,
+  output o_LED_1,
+  output o_LED_2,
+  output o_LED_3,
+  output o_LED_4,
   output o_Segment2_A,
   output o_Segment2_B,
   output o_Segment2_C,
@@ -20,21 +29,76 @@ module Count_7SD_Top (
   wire w_Segment2_F;
   wire w_Segment2_G;
 
-  reg [3:0] r_Nibble = 4'h0;
-  reg [31:0] r_Delay = 32'd0;
+  wire [3:0] w_Nibble;
 
-  always @(posedge i_Clk) begin
-    if (r_Delay == 25000000) begin
-      r_Delay <= 0;
-      r_Nibble <= r_Nibble + 1;
-    end else begin
-      r_Delay <= r_Delay + 1;
-    end
-  end
+// `define AUTO_COUNTER 1
+// `define SWITCH_COUNTER 1
+`define BIT_COUNTER 1
+
+`ifdef AUTO_COUNTER
+  Auto_Counter Counter (
+    .i_Clk,
+    .o_Nibble(w_Nibble)
+  );
+`endif
+
+`ifdef SWITCH_COUNTER
+  wire w_Switch_1;
+  Debounce_Switch Debouncer (
+    .i_Clk,
+    .i_Switch(i_Switch_1),
+    .o_Switch(w_Switch_1)
+  );
+
+  Switch_Counter Counter (
+    .i_Clk,
+    .i_Switch(w_Switch_1),
+    .o_Nibble(w_Nibble)
+  );
+`endif
+
+`ifdef BIT_COUNTER
+  wire w_Switch_1;
+  wire w_Switch_2;
+  wire w_Switch_3;
+  wire w_Switch_4;
+  Debounce_Switch Debounce_1 (
+    .i_Clk,
+    .i_Switch(i_Switch_1),
+    .o_Switch(w_Switch_1)
+  );
+
+  Debounce_Switch Debounce_2 (
+    .i_Clk,
+    .i_Switch(i_Switch_2),
+    .o_Switch(w_Switch_2)
+  );
+
+  Debounce_Switch Debounce_3 (
+    .i_Clk,
+    .i_Switch(i_Switch_3),
+    .o_Switch(w_Switch_3)
+  );
+
+  Debounce_Switch Debounce_4 (
+    .i_Clk,
+    .i_Switch(i_Switch_4),
+    .o_Switch(w_Switch_4)
+  );
+
+  Bit_Counter Counter (
+    .i_Clk,
+    .i_Switch_1(w_Switch_1),
+    .i_Switch_2(w_Switch_2),
+    .i_Switch_3(w_Switch_3),
+    .i_Switch_4(w_Switch_4),
+    .o_Nibble(w_Nibble)
+  );
+`endif
 
   Nibble_To_7SD Nibble_To_7SD_Inst (
     .i_Clk,
-    .i_Nibble(r_Nibble),
+    .i_Nibble(w_Nibble),
     .o_Segment_A(w_Segment2_A),
     .o_Segment_B(w_Segment2_B),
     .o_Segment_C(w_Segment2_C),
@@ -55,5 +119,10 @@ module Count_7SD_Top (
   assign io_PMOD_1 = w_Segment2_A;
   assign io_PMOD_2 = w_Segment2_B;
   assign io_PMOD_3 = w_Segment2_C;
+
+  assign o_LED_1 = w_Nibble[3];
+  assign o_LED_2 = w_Nibble[2];
+  assign o_LED_3 = w_Nibble[1];
+  assign o_LED_4 = w_Nibble[0];
     
 endmodule

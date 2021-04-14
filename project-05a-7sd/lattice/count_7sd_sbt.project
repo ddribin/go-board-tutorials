@@ -4,7 +4,7 @@ Version=Lattice Semiconductor Corporation iCEcube - Release: 2020.12.27943 - Bui
 ProjectName=count_7sd
 Vendor=SiliconBlue
 Synthesis=synplify
-ProjectVFiles=../Count_7SD_Top.v=work,../Nibble_To_7SD.v=work
+ProjectVFiles=../Count_7SD_Top.v=work,../Nibble_To_7SD.v=work,../Debounce_Switch.v=work,../Bit_Counter.v=work
 ProjectCFiles=
 CurImplementation=count_7sd_Implmnt
 Implementations=count_7sd_Implmnt
