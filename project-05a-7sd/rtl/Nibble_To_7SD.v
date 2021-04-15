@@ -23,9 +23,9 @@ module Nibble_To_7SD (
 
 
  0 .. 1 .. 2 .. 3 .. 4 .. 5 .. 6 .. 7 .. 8 .. 9
- _         _    _         _         _    _    _
+ _         _    _         _    _    _    _    _
 | |    |   _|   _|  |_|  |_   |_     |  |_|  |_|
-|_|    |  |_    _|    |   _|  |_|    |  |_|    |
+|_|    |  |_    _|    |   _|  |_|    |  |_|   _|
 
  A .. b .. C .. d .. E .. F     Segments
  _         _         _    _         A
@@ -51,10 +51,10 @@ module Nibble_To_7SD (
       4'h3 : r_Hex_Encoding <= SEG_A | SEG_B | SEG_G | SEG_C | SEG_D;
       4'h4 : r_Hex_Encoding <= SEG_F | SEG_B | SEG_G | SEG_C;
       4'h5 : r_Hex_Encoding <= SEG_A | SEG_F | SEG_G | SEG_C | SEG_D;
-      4'h6 : r_Hex_Encoding <= SEG_F | SEG_E | SEG_D | SEG_C | SEG_G;
+      4'h6 : r_Hex_Encoding <= SEG_A | SEG_F | SEG_E | SEG_D | SEG_C | SEG_G;
       4'h7 : r_Hex_Encoding <= SEG_A | SEG_B | SEG_C;
       4'h8 : r_Hex_Encoding <= SEG_A | SEG_B | SEG_C | SEG_D | SEG_E | SEG_F | SEG_G;
-      4'h9 : r_Hex_Encoding <= SEG_A | SEG_F | SEG_G | SEG_B | SEG_C;
+      4'h9 : r_Hex_Encoding <= SEG_A | SEG_F | SEG_G | SEG_B | SEG_C | SEG_D;
       4'hA : r_Hex_Encoding <= SEG_A | SEG_F | SEG_B | SEG_G | SEG_E | SEG_C;
       4'hB : r_Hex_Encoding <= SEG_F | SEG_E | SEG_D | SEG_C | SEG_G;
       4'hC : r_Hex_Encoding <= SEG_A | SEG_F | SEG_E | SEG_D;

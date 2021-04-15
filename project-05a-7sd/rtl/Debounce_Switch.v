@@ -7,7 +7,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 module Debounce_Switch (input i_Clk, input i_Switch, output o_Switch);
  
-  parameter c_DEBOUNCE_LIMIT = 250000;  // 10 ms at 25 MHz
+  parameter c_DEBOUNCE_LIMIT = 50000;  // 10 ms at 25 MHz
   localparam c_COUNT_WIDTH = $clog2(c_DEBOUNCE_LIMIT)-1;
    
   reg [c_COUNT_WIDTH:0] r_Count = 0;

@@ -171,14 +171,14 @@ TEST_CASE_METHOD(Fixture, "Digit 5", "[project-05a]")
 
 TEST_CASE_METHOD(Fixture, "Digit 6", "[project-05a]")
 {
-    //    
+    //  _ 
     // |_ 
     // |_|
     nibble.addInputs({{1, 0x6}});
 
     bench.tick(2);
 
-    CHECK(segment_a.changes() == OFF);
+    CHECK(segment_a.changes() == ON);
     CHECK(segment_b.changes() == OFF);
     CHECK(segment_c.changes() == ON);
     CHECK(segment_d.changes() == ON);
@@ -229,7 +229,7 @@ TEST_CASE_METHOD(Fixture, "Digit 9", "[project-05a]")
 {
     //  _
     // |_|
-    //   |
+    //  _|
     nibble.addInputs({{1, 0x9}});
 
     bench.tick(2);
@@ -237,7 +237,7 @@ TEST_CASE_METHOD(Fixture, "Digit 9", "[project-05a]")
     CHECK(segment_a.changes() == ON);
     CHECK(segment_b.changes() == ON);
     CHECK(segment_c.changes() == ON);
-    CHECK(segment_d.changes() == OFF);
+    CHECK(segment_d.changes() == ON);
     CHECK(segment_e.changes() == OFF);
     CHECK(segment_f.changes() == ON);
     CHECK(segment_g.changes() == ON);

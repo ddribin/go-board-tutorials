@@ -2,6 +2,10 @@
 #-- Project file /home/dave/Shared/go-board-tutorials/project-05a-7sd/count_7sd/count_7sd_syn.prj
 #project files
 
+add_file -verilog -lib work "../rtl/Bit_Counter.v" 
+add_file -verilog -lib work "../rtl/Count_7SD_Top.v" 
+add_file -verilog -lib work "../rtl/Debounce_Switch.v" 
+add_file -verilog -lib work "../rtl/Nibble_To_7SD.v" 
 #implementation: "count_7sd_Implmnt"
 impl -add count_7sd_Implmnt -type fpga
 
