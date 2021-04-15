@@ -1,4 +1,6 @@
-module Auto_Counter (
+module Auto_Counter #(
+  parameter g_Delay = 25000000
+) (
   input i_Clk,
   output [3:0] o_Nibble
 );
@@ -7,7 +9,7 @@ module Auto_Counter (
   reg [31:0] r_Delay = 32'd0;
     
   always @(posedge i_Clk) begin
-    if (r_Delay == 25000000) begin
+    if (r_Delay == g_Delay) begin
       r_Delay <= 0;
       r_Nibble <= r_Nibble + 1;
     end else begin
