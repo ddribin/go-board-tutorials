@@ -125,13 +125,14 @@ module Count_7SD_Top (
   assign o_Segment2_F = ~r_Segments2[5];
   assign o_Segment2_G = ~r_Segments2[6];
 
-  assign io_PMOD_1 = w_Segments_SM[0];
-  assign io_PMOD_2 = w_Segments_SM[1];
-  assign io_PMOD_3 = i_Clk;
-
   assign o_LED_1 = r_Nibble[3];
   assign o_LED_2 = r_Nibble[2];
   assign o_LED_3 = r_Nibble[1];
   assign o_LED_4 = r_Nibble[0];
     
+  // For debugging: Send some signals out the PMOD connector
+  assign io_PMOD_1 = w_Segments_SM[0];
+  assign io_PMOD_2 = w_Segments_SM[1];
+  assign io_PMOD_3 = w_Segments_SM[3];
+
 endmodule

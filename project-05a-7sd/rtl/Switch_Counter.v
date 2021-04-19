@@ -11,7 +11,8 @@ module Switch_Counter (
     r_Switch <= i_Switch;
     // Rising edge of i_Switch
     if ((i_Switch == 1'b1) && (r_Switch == 1'b0)) begin
-      r_Nibble <= (r_Nibble + 1) % 10;
+      if (r_Nibble == 9) r_Nibble <= 0;
+      else r_Nibble <= r_Nibble + 1;
     end
   end
 

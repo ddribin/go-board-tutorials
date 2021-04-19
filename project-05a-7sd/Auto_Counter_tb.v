@@ -5,9 +5,6 @@ module Auto_Counter_tb (
 
   Auto_Counter #(
     .g_Delay(4)
-  ) counter (
-    .i_Clk,
-    .o_Nibble
-  );
+  ) counter (.*);
     
 endmodule
