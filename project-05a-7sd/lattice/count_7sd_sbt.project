@@ -4,7 +4,7 @@ Version=Lattice Semiconductor Corporation iCEcube - Release: 2020.12.27943 - Bui
 ProjectName=count_7sd
 Vendor=SiliconBlue
 Synthesis=synplify
-ProjectVFiles=../rtl/Bit_Counter.v,../rtl/Count_7SD_Top.v,../rtl/Debounce_Switch.v,../rtl/Nibble_To_7SD.v
+ProjectVFiles=../rtl/Bit_Counter.v=work,../rtl/Count_7SD_Top.v=work,../rtl/Debounce_Switch.v=work,../rtl/Nibble_To_7SD.v=work,../rtl/State_Machine.v=work,../rtl/Auto_Counter.v=work,../rtl/Switch_Counter.v=work
 ProjectCFiles=
 CurImplementation=count_7sd_Implmnt
 Implementations=count_7sd_Implmnt
@@ -20,7 +20,7 @@ NetlistFile=count_7sd_Implmnt/count_7sd.edf
 AdditionalEDIFFile=
 IPEDIFFile=
 DesignLib=count_7sd_Implmnt/sbt/netlist/oadb-Count_7SD_Top
-DesignView=_ep
+DesignView=
 DesignCell=Count_7SD_Top
 SynthesisSDCFile=count_7sd_Implmnt/count_7sd.scf
 UserPinConstraintFile=

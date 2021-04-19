@@ -22,7 +22,6 @@ struct SwitchCounterFixture {
     {
         bench.addInput(swtch);
         bench.addOutput(nibble);
-
     };
 };
 

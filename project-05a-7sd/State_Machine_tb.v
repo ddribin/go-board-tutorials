@@ -1,0 +1,12 @@
+module State_Machine_tb (
+  input i_Clk,
+  input [3:0] i_Switches,
+  output [1:0] o_State,
+  output [6:0] o_Segments
+);
+
+  State_Machine #(
+    .g_DELAY(9)
+  ) counter (.*);
+    
+endmodule
