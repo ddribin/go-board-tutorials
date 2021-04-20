@@ -26,7 +26,7 @@ module Count_7SD_Top (
   wire [3:0] w_Switches;
   wire [3:0] w_Nibble;
   wire [6:0] w_Segments2;
-  wire [1:0] w_State;
+  wire [`STATE_WIDTH:0] w_State;
   wire [6:0] w_Segments_SM;
 
   Debounce_Switch Debounce_1 (
@@ -110,7 +110,7 @@ module Count_7SD_Top (
 
   reg [6:0] r_Segments2;
   always @(posedge i_Clk) begin
-    if (w_State == `STATE_INIT) begin
+    if ((w_State == `STATE_INIT) || (w_State == `STATE_RESET_WAIT)) begin
       r_Segments2 <= w_Segments_SM;
     end else begin
       r_Segments2 <= w_Segments2;

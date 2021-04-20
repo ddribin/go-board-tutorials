@@ -7,17 +7,18 @@ module State_Machine #(
 ) (
   input i_Clk,
   input [3:0] i_Switches,
-  output [1:0] o_State,
+  output [`STATE_WIDTH:0] o_State,
   output [6:0] o_Segments
 );
 
   reg [3:0] r_Switches;
-  reg [1:0] r_State = `STATE_INIT;
+  reg [`STATE_WIDTH:0] r_State = `STATE_INIT;
   reg [2:0] r_Segment = 3'd0;
   reg [31:0] r_Delay = 32'd0;
 
   always @(posedge i_Clk) begin
     r_Switches <= i_Switches;
+
     case (r_State)
       `STATE_INIT : begin
         if ((i_Switches[0] == 1'b0) && (r_Switches[0] == 1'b1)) begin
@@ -54,9 +55,8 @@ module State_Machine #(
         if (i_Switches[3] == 1'b1) begin
           // Switch 4 held down
           if (r_Delay == g_RESET_DELAY) begin
-            r_State <= `STATE_INIT;
-            r_Delay <= 0;
-            r_Segment <= 0;
+            r_State <= `STATE_RESET_WAIT;
+            r_Segment <= 6;
           end else begin
             r_Delay <= r_Delay + 1;
           end
@@ -64,6 +64,15 @@ module State_Machine #(
           r_Delay <= 0;
         end
 
+      end
+
+      `STATE_RESET_WAIT : begin
+        if ((i_Switches[3] == 1'b0)) begin
+          // Falling edge of Switch 4
+          r_State <= `STATE_INIT;
+          r_Delay <= 0;
+          r_Segment <= 0;
+        end
       end
 
       default: begin

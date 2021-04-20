@@ -50,6 +50,7 @@ enum State : uint8_t {
     STATE_AUTO = 1,
     STATE_SWITCH = 2,
     STATE_BIT = 3,
+    STATE_RESET_WAIT = 4,
 };
 
 TEST_CASE_METHOD(Fixture, "state-machine: Initial state", "[project-05a]")
@@ -154,7 +155,7 @@ TEST_CASE_METHOD(Fixture, "state-machine: Switches don't change state in AUTO", 
     REQUIRE(state.changes() == expected);
 }
 
-TEST_CASE_METHOD(Fixture, "state-machine: Switch4 not long enough to INIT", "[project-05a]")
+TEST_CASE_METHOD(Fixture, "state-machine: Switch 4 not long enough to INIT", "[project-05a]")
 {
     switches.addInputs({
         {2, Switch1}, {10, 0},
@@ -170,33 +171,33 @@ TEST_CASE_METHOD(Fixture, "state-machine: Switch4 not long enough to INIT", "[pr
     REQUIRE(segments.changes() == expectedSegments);
 }
 
-TEST_CASE_METHOD(Fixture, "state-machine: Switch4 goes back to INIT", "[project-05a]")
+TEST_CASE_METHOD(Fixture, "state-machine: Switch 4 half press transitions to STATE_RESET_WAIT", "[project-05a]")
 {
     switches.addInputs({
-        {2, Switch1}, {10, 0},
-        {12, Switch4}, {24, 0},
+        {2, Switch1}, {11, 0},
+        {12, Switch4},
     });
 
     bench.tick(30);
 
-    ChangeVector8 expected({{10, STATE_AUTO}, {23, STATE_INIT}});
+    ChangeVector8 expected({{11, STATE_AUTO}, {23, STATE_RESET_WAIT}});
     REQUIRE(state.changes() == expected);
 }
 
-TEST_CASE_METHOD(Fixture, "state-machine: Switch4 resets segments", "[project-05a]")
+TEST_CASE_METHOD(Fixture, "state-machine: Switch 4 full presss transitions to STATE_INIT", "[project-05a]")
 {
     switches.addInputs({
         {2, Switch1}, {11, 0},
-        {12, Switch4}, {24, 0},
+        {12, Switch4}, {25, 0},
     });
 
     bench.tick(40);
 
-    ChangeVector8 expectedState({{11, STATE_AUTO}, {23, STATE_INIT}});
+    ChangeVector8 expectedState({{11, STATE_AUTO}, {23, STATE_RESET_WAIT}, {25, STATE_INIT}});
     REQUIRE(state.changes() == expectedState);
 
     ChangeVector8 expectedSegments({
-        {10, SegmentB}, {23, SegmentA}, {33, SegmentB},
+        {10, SegmentB}, {23, SegmentG}, {25, SegmentA}, {35, SegmentB},
     });
     REQUIRE(segments.changes() == expectedSegments);
 }
