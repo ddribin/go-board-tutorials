@@ -6,7 +6,8 @@ module State_Machine_tb (
 );
 
   State_Machine #(
-    .g_DELAY(9)
+    .g_ANIMATION_DELAY(9),
+    .g_RESET_DELAY(11)
   ) counter (.*);
     
 endmodule
