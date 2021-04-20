@@ -45,30 +45,21 @@ module State_Machine #(
       `STATE_AUTO,
       `STATE_SWITCH,
       `STATE_BIT : begin
-        // if ((i_Switches[3] == 1'b1) && (r_Switches[3] == 1'b0)) begin
-        //   // Rising edge of Switch 4
-        //   r_Delay <= 0;
-        // end else if ((i_Switches[3] == 1'b1) && (r_Switches[3] == 1'b0)) begin
-        //   // Falling edge of Switch 4
-        //   r_Delay <= 0;
-        // end else if ((i_Switches[3] == 1'b1) && (r_Switches[3] == 1'b1)) begin
         if (i_Switches[3] == 1'b1) begin
-          // Switch 4 held down
+          // Switch 4 is down
           if (r_Delay == g_RESET_DELAY) begin
             r_State <= `STATE_RESET_WAIT;
-            r_Segment <= 6;
           end else begin
             r_Delay <= r_Delay + 1;
           end
         end else begin
           r_Delay <= 0;
         end
-
       end
 
       `STATE_RESET_WAIT : begin
         if ((i_Switches[3] == 1'b0)) begin
-          // Falling edge of Switch 4
+          // Switch 4 is up
           r_State <= `STATE_INIT;
           r_Delay <= 0;
           r_Segment <= 0;

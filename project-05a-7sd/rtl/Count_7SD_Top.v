@@ -1,4 +1,5 @@
 `include "State_Machine.vh"
+`include "Seven_Segment_Display.vh"
 
 module Count_7SD_Top (
   input i_Clk,
@@ -66,11 +67,11 @@ module Count_7SD_Top (
     .o_Nibble(w_Auto_Nibble)
   );
 
-  wire [3:0] w_Swtich_Nibble;
+  wire [3:0] w_Switch_Nibble;
   Switch_Counter Switch_Count_Inst (
     .i_Clk,
     .i_Switch(w_Switches[0]),
-    .o_Nibble(w_Swtich_Nibble)
+    .o_Nibble(w_Switch_Nibble)
   );
 
   wire [3:0] w_Bit_Nibble;
@@ -85,15 +86,13 @@ module Count_7SD_Top (
 
   reg [3:0] r_Nibble;
   always @(posedge i_Clk) begin
-    if (w_State == `STATE_AUTO) begin
-      r_Nibble <= w_Auto_Nibble;
-    end else if (w_State == `STATE_SWITCH) begin
-      r_Nibble <= w_Swtich_Nibble;
-    end else if (w_State == `STATE_BIT) begin
-      r_Nibble <= w_Bit_Nibble;
-    end else begin
-      r_Nibble <= 4'd0;
-    end
+    case (w_State)
+      `STATE_AUTO: r_Nibble <= w_Auto_Nibble;
+      `STATE_SWITCH: r_Nibble <= w_Switch_Nibble;
+      `STATE_BIT: r_Nibble <= w_Bit_Nibble;
+      `STATE_RESET_WAIT: r_Nibble <= 4'b1111;
+      default: r_Nibble <= 4'd0;
+    endcase
   end
 
   Nibble_To_7SD Nibble_To_7SD_Inst (
@@ -110,11 +109,11 @@ module Count_7SD_Top (
 
   reg [6:0] r_Segments2;
   always @(posedge i_Clk) begin
-    if ((w_State == `STATE_INIT) || (w_State == `STATE_RESET_WAIT)) begin
-      r_Segments2 <= w_Segments_SM;
-    end else begin
-      r_Segments2 <= w_Segments2;
-    end
+    case (w_State)
+      `STATE_INIT: r_Segments2 <= w_Segments_SM;
+      `STATE_RESET_WAIT: r_Segments2 <= `SEGMENT_E | `SEGMENT_G;
+      default: r_Segments2 <= w_Segments2;
+    endcase
   end
 
   assign o_Segment2_A = ~r_Segments2[0];

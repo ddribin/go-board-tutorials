@@ -197,7 +197,7 @@ TEST_CASE_METHOD(Fixture, "state-machine: Switch 4 full presss transitions to ST
     REQUIRE(state.changes() == expectedState);
 
     ChangeVector8 expectedSegments({
-        {10, SegmentB}, {23, SegmentG}, {25, SegmentA}, {35, SegmentB},
+        {10, SegmentB}, {25, SegmentA}, {35, SegmentB},
     });
     REQUIRE(segments.changes() == expectedSegments);
 }
