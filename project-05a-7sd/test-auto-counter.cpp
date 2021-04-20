@@ -13,11 +13,14 @@ struct AutoCounterFixture {
     using SignalObserver8 = SignalObserver<uint8_t, UUT>;
     TestBench<UUT> bench;
     UUT& core;
+    SignalPublisher8 reset;
     SignalObserver8 nibble;
     AutoCounterFixture() :
         core(bench.core()),
+        reset(&UUT::i_Reset),
         nibble(&UUT::o_Nibble)
     {
+        bench.addInput(reset);
         bench.addOutput(nibble);
     };
 };
@@ -53,4 +56,24 @@ TEST_CASE_METHOD(Fixture, "[auto-counter] Wraps around at 0xF", "[project-05a]")
         {85, 0x1}, {90, 0x2}, {95, 0x3}, {100, 0x4},
     });
     REQUIRE(nibble.changes() == expected);
+}
+
+TEST_CASE_METHOD(Fixture, "[auto-counter] Initial reset delays counting", "[project-05a]")
+{
+    reset.addInputs({{1, 1}, {8, 0}});
+    
+    bench.tick(25);
+
+    ChangeVector8 expected({{12, 0x1}, {17, 0x2}, {22, 0x3}});
+    REQUIRE(nibble.changes() == expected);
+}
+
+TEST_CASE_METHOD(Fixture, "[auto-counter] Reset after running", "[project-05a]")
+{
+    reset.addInputs({{13, 1}, {18, 0}});
+    
+    bench.tick(35);
+
+    ChangeVector8 expected({{5,  0x1}, {10, 0x2}, {13, 0x0}, {22, 0x1}, {27, 0x2}, {32, 0x3}});
+    CHECK(nibble.changes() == expected);
 }

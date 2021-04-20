@@ -10,12 +10,13 @@ target_include_directories(${PROJECT_NAME}-library PUBLIC . ../verilatest)
 set(VERILATEST_TARGET ${PROJECT_NAME}-library)
 add_subdirectory(../verilatest verilatest)
 
-verilate(${PROJECT_NAME}-library SOURCES rtl/Count_7SD_Top.v INCLUDE_DIRS rtl)
-verilate(${PROJECT_NAME}-library SOURCES rtl/Nibble_To_7SD.v INCLUDE_DIRS rtl)
-verilate(${PROJECT_NAME}-library SOURCES rtl/Switch_Counter.v INCLUDE_DIRS rtl)
-verilate(${PROJECT_NAME}-library SOURCES rtl/Bit_Counter.v INCLUDE_DIRS rtl)
-verilate(${PROJECT_NAME}-library SOURCES Auto_Counter_tb.v INCLUDE_DIRS rtl)
-verilate(${PROJECT_NAME}-library SOURCES State_Machine_tb.v INCLUDE_DIRS rtl)
+set(TRACE_ENABLED 0)
+verilate(${PROJECT_NAME}-library SOURCES rtl/Count_7SD_Top.v INCLUDE_DIRS rtl TRACE $TRACE_ENABLED)
+verilate(${PROJECT_NAME}-library SOURCES rtl/Nibble_To_7SD.v INCLUDE_DIRS rtl TRACE $TRACE_ENABLED)
+verilate(${PROJECT_NAME}-library SOURCES rtl/Switch_Counter.v INCLUDE_DIRS rtl TRACE $TRACE_ENABLED)
+verilate(${PROJECT_NAME}-library SOURCES rtl/Bit_Counter.v INCLUDE_DIRS rtl TRACE $TRACE_ENABLED)
+verilate(${PROJECT_NAME}-library SOURCES Auto_Counter_tb.v INCLUDE_DIRS rtl TRACE $TRACE_ENABLED)
+verilate(${PROJECT_NAME}-library SOURCES State_Machine_tb.v INCLUDE_DIRS rtl TRACE $TRACE_ENABLED)
 
 find_package(Catch2 REQUIRED)
 include(CTest)
@@ -30,7 +31,11 @@ add_executable(${PROJECT_NAME}-tests
     ../common/test-common.hpp
     ../common/test-main.cpp
 )
-target_compile_definitions(${PROJECT_NAME}-tests PRIVATE VERILATEST_TRACE=0)
+
+if(NOT TRACE_ENABLED)
+    message("Trace disabled")
+    target_compile_definitions(${PROJECT_NAME}-tests PRIVATE VERILATEST_TRACE=0)
+endif()
 target_include_directories(${PROJECT_NAME}-tests PRIVATE ../common)
 target_link_libraries(${PROJECT_NAME}-tests PRIVATE
     ${PROJECT_NAME}-library Catch2::Catch2)

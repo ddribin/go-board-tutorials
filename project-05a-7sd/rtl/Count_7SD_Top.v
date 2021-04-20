@@ -64,6 +64,7 @@ module Count_7SD_Top (
   wire [3:0] w_Auto_Nibble;
   Auto_Counter Auto_Counter_Inst (
     .i_Clk,
+    .i_Reset(1),
     .o_Nibble(w_Auto_Nibble)
   );
 
