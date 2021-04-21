@@ -9,6 +9,7 @@ add_file -verilog -lib work "../rtl/Nibble_To_7SD.v"
 add_file -verilog -lib work "../rtl/State_Machine.v" 
 add_file -verilog -lib work "../rtl/Auto_Counter.v" 
 add_file -verilog -lib work "../rtl/Switch_Counter.v" 
+add_file -verilog -lib work "../rtl/Debounce_All.v" 
 #implementation: "count_7sd_Implmnt"
 impl -add count_7sd_Implmnt -type fpga
 

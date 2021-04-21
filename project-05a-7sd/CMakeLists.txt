@@ -33,7 +33,6 @@ add_executable(${PROJECT_NAME}-tests
 )
 
 if(NOT TRACE_ENABLED)
-    message("Trace disabled")
     target_compile_definitions(${PROJECT_NAME}-tests PRIVATE VERILATEST_TRACE=0)
 endif()
 target_include_directories(${PROJECT_NAME}-tests PRIVATE ../common)

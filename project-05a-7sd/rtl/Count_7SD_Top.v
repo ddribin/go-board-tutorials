@@ -24,34 +24,16 @@ module Count_7SD_Top (
   output o_Segment2_G
 );
 
-  wire [3:0] w_Switches;
   wire [3:0] w_Nibble;
   wire [6:0] w_Segments2;
   wire [`STATE_WIDTH-1:0] w_State;
   wire [6:0] w_Segments_SM;
 
-  Debounce_Switch Debounce_1 (
+  wire [3:0] w_Switches;
+  Debounce_All Debounce_All_Inst (
     .i_Clk,
-    .i_Switch(i_Switch_1),
-    .o_Switch(w_Switches[0])
-  );
-
-  Debounce_Switch Debounce_2 (
-    .i_Clk,
-    .i_Switch(i_Switch_2),
-    .o_Switch(w_Switches[1])
-  );
-
-  Debounce_Switch Debounce_3 (
-    .i_Clk,
-    .i_Switch(i_Switch_3),
-    .o_Switch(w_Switches[2])
-  );
-
-  Debounce_Switch Debounce_4 (
-    .i_Clk,
-    .i_Switch(i_Switch_4),
-    .o_Switch(w_Switches[3])
+    .i_Switch_1, .i_Switch_2, .i_Switch_3, .i_Switch_4,
+    .o_Switches(w_Switches)
   );
 
   State_Machine machine (
