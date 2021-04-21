@@ -46,11 +46,11 @@ enum Segment : uint8_t {
 };
 
 enum State : uint8_t {
-    STATE_INIT = 0,
-    STATE_AUTO = 1,
-    STATE_SWITCH = 2,
-    STATE_BIT = 3,
-    STATE_RESET_WAIT = 4,
+    STATE_INIT = 0b000,
+    STATE_RESET_WAIT = 0b001,
+    STATE_AUTO = 0b100,
+    STATE_SWITCH = 0b101,
+    STATE_BIT = 0b110,
 };
 
 TEST_CASE_METHOD(Fixture, "state-machine: Initial state", "[project-05a]")

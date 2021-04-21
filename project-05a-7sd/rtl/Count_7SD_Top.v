@@ -27,7 +27,7 @@ module Count_7SD_Top (
   wire [3:0] w_Switches;
   wire [3:0] w_Nibble;
   wire [6:0] w_Segments2;
-  wire [`STATE_WIDTH:0] w_State;
+  wire [`STATE_WIDTH-1:0] w_State;
   wire [6:0] w_Segments_SM;
 
   Debounce_Switch Debounce_1 (
@@ -64,7 +64,7 @@ module Count_7SD_Top (
   wire [3:0] w_Auto_Nibble;
   Auto_Counter Auto_Counter_Inst (
     .i_Clk,
-    .i_Reset(1),
+    .i_Reset(~w_State[2]),
     .o_Nibble(w_Auto_Nibble)
   );
 

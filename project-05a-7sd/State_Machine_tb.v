@@ -3,7 +3,7 @@
 module State_Machine_tb (
   input i_Clk,
   input [3:0] i_Switches,
-  output [`STATE_WIDTH:0] o_State,
+  output [`STATE_WIDTH-1:0] o_State,
   output [6:0] o_Segments
 );
 
