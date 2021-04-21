@@ -1,5 +1,6 @@
 module Switch_Counter (
   input i_Clk,
+  input i_Reset,
   input i_Switch,
   output [3:0] o_Nibble
 );
@@ -9,8 +10,10 @@ module Switch_Counter (
 
   always @(posedge i_Clk) begin
     r_Switch <= i_Switch;
-    // Rising edge of i_Switch
-    if ((i_Switch == 1'b1) && (r_Switch == 1'b0)) begin
+    if (i_Reset) begin
+      r_Nibble <= 0;
+    end else if ((i_Switch == 1'b1) && (r_Switch == 1'b0)) begin
+      // Rising edge of i_Switch
       if (r_Nibble == 9) r_Nibble <= 0;
       else r_Nibble <= r_Nibble + 1;
     end
