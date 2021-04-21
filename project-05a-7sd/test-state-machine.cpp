@@ -201,3 +201,24 @@ TEST_CASE_METHOD(Fixture, "state-machine: Switch 4 full presss transitions to ST
     });
     REQUIRE(segments.changes() == expectedSegments);
 }
+
+TEST_CASE_METHOD(Fixture, "state-machine: Reset spans other switches", "[project-05a]")
+{
+    switches.addInputs({
+        {2, Switch1}, {11, 0},
+        {12, Switch4},
+        // Switch 2 is pressed during reset, but then released after
+        {14, Switch2 | Switch4},
+        {25, Switch2},
+        {30, 0},
+    });
+
+    bench.tick(40);
+
+    // No good way to avoid the transition to STATE_SWITCH when Switch2 is released without introducing another state
+    ChangeVector8 expectedState({
+        {11, STATE_AUTO}, {23, STATE_RESET_WAIT}, {25, STATE_INIT},
+        {30, STATE_SWITCH}
+    });
+    REQUIRE(state.changes() == expectedState);
+}
