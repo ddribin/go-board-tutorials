@@ -1,5 +1,6 @@
 module Bit_Counter (
   input i_Clk,
+  input i_Reset,
   input i_Switch_1,
   input i_Switch_2,
   input i_Switch_3,
@@ -19,20 +20,24 @@ module Bit_Counter (
     r_Switch_3 <= i_Switch_3;
     r_Switch_4 <= i_Switch_4;
 
-    if ((i_Switch_1 == 1'b1) && (r_Switch_1 == 1'b0)) begin
-      r_Nibble[0] <= ~r_Nibble[0];
-    end
+    if (i_Reset) begin
+      r_Nibble <= 0;
+    end else begin
+      if ((i_Switch_1 == 1'b1) && (r_Switch_1 == 1'b0)) begin
+        r_Nibble[0] <= ~r_Nibble[0];
+      end
 
-    if ((i_Switch_2 == 1'b1) && (r_Switch_2 == 1'b0)) begin
-      r_Nibble[1] <= ~r_Nibble[1];
-    end
+      if ((i_Switch_2 == 1'b1) && (r_Switch_2 == 1'b0)) begin
+        r_Nibble[1] <= ~r_Nibble[1];
+      end
 
-    if ((i_Switch_3 == 1'b1) && (r_Switch_3 == 1'b0)) begin
-      r_Nibble[2] <= ~r_Nibble[2];
-    end
+      if ((i_Switch_3 == 1'b1) && (r_Switch_3 == 1'b0)) begin
+        r_Nibble[2] <= ~r_Nibble[2];
+      end
 
-    if ((i_Switch_4 == 1'b1) && (r_Switch_4 == 1'b0)) begin
-      r_Nibble[3] <= ~r_Nibble[3];
+      if ((i_Switch_4 == 1'b1) && (r_Switch_4 == 1'b0)) begin
+        r_Nibble[3] <= ~r_Nibble[3];
+      end
     end
   end
 

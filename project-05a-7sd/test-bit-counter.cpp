@@ -13,6 +13,7 @@ struct BitCounterFixture {
     using SignalObserver8 = SignalObserver<uint8_t, UUT>;
     TestBench<UUT> bench;
     UUT& core;
+    SignalPublisher8 reset;
     SignalPublisher8 switch1;
     SignalPublisher8 switch2;
     SignalPublisher8 switch3;
@@ -20,12 +21,14 @@ struct BitCounterFixture {
     SignalObserver8 nibble;
     BitCounterFixture() :
         core(bench.core()),
+        reset(&UUT::i_Reset),
         switch1(&UUT::i_Switch_1),
         switch2(&UUT::i_Switch_2),
         switch3(&UUT::i_Switch_3),
         switch4(&UUT::i_Switch_4),
         nibble(&UUT::o_Nibble)
     {
+        bench.addInput(reset);
         bench.addInput(switch1);
         bench.addInput(switch2);
         bench.addInput(switch3);
@@ -106,5 +109,21 @@ TEST_CASE_METHOD(Fixture, "[bit-counter] Multiple switches", "[project-05a]")
     bench.tick(20);
 
     ChangeVector8 expected({{2, 0x1}, {4, 0x5}, {10, 0x4}, {12, 0x0}});
+    REQUIRE(nibble.changes() == expected);
+}
+
+TEST_CASE_METHOD(Fixture, "[bit-counter] Reset", "[project-05a]")
+{
+    switch1.addInputs({
+        {2, SwitchDown}, {8, SwitchUp}, {20, SwitchDown}, {25, SwitchUp},
+    });
+    switch3.addInputs({
+        {4, SwitchDown}, {5, SwitchUp}, {22, SwitchDown}, {26, SwitchUp},
+    });
+    reset.addInputs({{10, 1}, {12, 0}});
+
+    bench.tick(30);
+
+    ChangeVector8 expected({{2, 0x1}, {4, 0x5}, {10, 0x0}, {20, 0x1}, {22, 0x5}});
     REQUIRE(nibble.changes() == expected);
 }

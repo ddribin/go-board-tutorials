@@ -62,6 +62,7 @@ module Count_7SD_Top (
   wire [3:0] w_Bit_Nibble;
   Bit_Counter Bit_Counter_Inst (
     .i_Clk,
+    .i_Reset(w_Reset),
     .i_Switch_1(w_Switches[0]),
     .i_Switch_2(w_Switches[1]),
     .i_Switch_3(w_Switches[2]),
