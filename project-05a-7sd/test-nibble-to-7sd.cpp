@@ -1,7 +1,7 @@
 #include "test-common.hpp"
-#include "VNibble_To_7SD.h"
+#include "VNibble_To_7SD_tb.h"
 
-struct VNibble_To_7SD_Adapter : public VNibble_To_7SD
+struct VNibble_To_7SD_Adapter : public VNibble_To_7SD_tb
 {
     void setClock(uint64_t clock) { i_Clk = clock; }
 };

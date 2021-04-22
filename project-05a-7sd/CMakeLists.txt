@@ -12,11 +12,11 @@ add_subdirectory(../verilatest verilatest)
 
 set(TRACE_ENABLED 0)
 verilate(${PROJECT_NAME}-library SOURCES rtl/Count_7SD_Top.v INCLUDE_DIRS rtl TRACE $TRACE_ENABLED)
-verilate(${PROJECT_NAME}-library SOURCES rtl/Nibble_To_7SD.v INCLUDE_DIRS rtl TRACE $TRACE_ENABLED)
 verilate(${PROJECT_NAME}-library SOURCES rtl/Switch_Counter.v INCLUDE_DIRS rtl TRACE $TRACE_ENABLED)
 verilate(${PROJECT_NAME}-library SOURCES rtl/Bit_Counter.v INCLUDE_DIRS rtl TRACE $TRACE_ENABLED)
 verilate(${PROJECT_NAME}-library SOURCES Auto_Counter_tb.v INCLUDE_DIRS rtl TRACE $TRACE_ENABLED)
 verilate(${PROJECT_NAME}-library SOURCES State_Machine_tb.v INCLUDE_DIRS rtl TRACE $TRACE_ENABLED)
+verilate(${PROJECT_NAME}-library SOURCES Nibble_To_7SD_tb.v INCLUDE_DIRS rtl TRACE $TRACE_ENABLED)
 
 find_package(Catch2 REQUIRED)
 include(CTest)

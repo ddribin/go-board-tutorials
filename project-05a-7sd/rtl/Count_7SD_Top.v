@@ -84,13 +84,7 @@ module Count_7SD_Top (
   Nibble_To_7SD Nibble_To_7SD_Inst (
     .i_Clk,
     .i_Nibble(r_Nibble),
-    .o_Segment_A(w_Segments2[0]),
-    .o_Segment_B(w_Segments2[1]),
-    .o_Segment_C(w_Segments2[2]),
-    .o_Segment_D(w_Segments2[3]),
-    .o_Segment_E(w_Segments2[4]),
-    .o_Segment_F(w_Segments2[5]),
-    .o_Segment_G(w_Segments2[6])
+    .o_Segments(w_Segments2)
   );
 
   reg [6:0] r_Segments2;
