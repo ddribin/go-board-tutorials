@@ -55,10 +55,11 @@ TEST_CASE_METHOD(Fixture, "Receive 1 byte", "[project-07a]")
 
     bench.tick(150);
 
-    ChangeVector8 expectedValid({{105, 1}, {109, 0}});
+    ChangeVector8 expectedValid({{105, 1}, {106, 0}});
     CHECK(receiveValid.changes() == expectedValid);
 
     ChangeVector8 expectedByte({
+    //  {15,  0b00000000},
         {25,  0b10000000},
         {35,  0b11000000},
         {45,  0b11100000},
@@ -67,7 +68,6 @@ TEST_CASE_METHOD(Fixture, "Receive 1 byte", "[project-07a]")
         {75,  0b11011100},
         {85,  0b01101110},
         {95,  0b00110111},
-        {109, 0},
     });
     CHECK(receiveByte.changes() == expectedByte);
 }
@@ -104,12 +104,13 @@ TEST_CASE_METHOD(Fixture, "Receive 2 bytes with delay", "[project-07a]")
     bench.tick(350);
 
     ChangeVector8 expectedValid({
-        {105, 1}, {109, 0},
-        {305, 1}, {309, 0},
+        {105, 1}, {106, 0},
+        {305, 1}, {306, 0},
     });
     CHECK(receiveValid.changes() == expectedValid);
 
     ChangeVector8 expectedByte({
+    //  {15,  0b00000000},
         {25,  0b10000000},
         {35,  0b11000000},
         {45,  0b11100000},
@@ -118,7 +119,7 @@ TEST_CASE_METHOD(Fixture, "Receive 2 bytes with delay", "[project-07a]")
         {75,  0b11011100},
         {85,  0b01101110},
         {95,  0b00110111},
-        {109, 0},
+        {210, 0},
     //  {225, 0b00000000},
     //  {235, 0b00000000},
     //  {245, 0b00000000},
@@ -127,7 +128,6 @@ TEST_CASE_METHOD(Fixture, "Receive 2 bytes with delay", "[project-07a]")
         {275, 0b01000000},
         {285, 0b00100000},
         {295, 0b10010000},
-        {309, 0},
     });
     CHECK(receiveByte.changes() == expectedByte);
 }
@@ -164,8 +164,8 @@ TEST_CASE_METHOD(Fixture, "Receive 2 bytes back to back", "[project-07a]")
     bench.tick(250);
 
     ChangeVector8 expectedValid({
-        {105, 1}, {109, 0},
-        {205, 1}, {209, 0},
+        {105, 1}, {106, 0},
+        {205, 1}, {206, 0},
     });
     CHECK(receiveValid.changes() == expectedValid);
 
@@ -178,7 +178,7 @@ TEST_CASE_METHOD(Fixture, "Receive 2 bytes back to back", "[project-07a]")
         {75,  0b11011100},
         {85,  0b01101110},
         {95,  0b00110111},
-        {109, 0},
+        {110, 0},
     //  {125, 0b00000000},
     //  {135, 0b00000000},
     //  {145, 0b00000000},
@@ -187,7 +187,6 @@ TEST_CASE_METHOD(Fixture, "Receive 2 bytes back to back", "[project-07a]")
         {175, 0b01000000},
         {185, 0b00100000},
         {195, 0b10010000},
-        {209, 0},
     });
     CHECK(receiveByte.changes() == expectedByte);
 }
@@ -212,7 +211,7 @@ TEST_CASE_METHOD(Fixture, "Glitched start bit restarts state machine", "[project
 
     bench.tick(150);
 
-    ChangeVector8 expectedValid({{115, 1}, {119, 0}});
+    ChangeVector8 expectedValid({{115, 1}, {116, 0}});
     CHECK(receiveValid.changes() == expectedValid);
 
     ChangeVector8 expectedByte({
@@ -224,14 +223,12 @@ TEST_CASE_METHOD(Fixture, "Glitched start bit restarts state machine", "[project
         {85,  0b11011100},
         {95,  0b01101110},
         {105, 0b00110111},
-        {119, 0},
     });
     CHECK(receiveByte.changes() == expectedByte);
 }
 
 TEST_CASE_METHOD(Fixture, "Glitched stop bit restarts state machine", "[project-07a]")
 {
-    bench.openTrace("/tmp/trace.vcd");
     // Send 0x37 = 0011 0111
     serialRx.addInputs({
         {10,  0},   // Start bit
@@ -264,7 +261,7 @@ TEST_CASE_METHOD(Fixture, "Glitched stop bit restarts state machine", "[project-
     bench.tick(250);
 
     ChangeVector8 expectedValid({
-        {205, 1}, {209, 0},
+        {205, 1}, {206, 0},
     });
     CHECK(receiveValid.changes() == expectedValid);
 
@@ -277,7 +274,7 @@ TEST_CASE_METHOD(Fixture, "Glitched stop bit restarts state machine", "[project-
         {75,  0b11011100},
         {85,  0b01101110},
         {95,  0b00110111},
-        {105, 0},
+        {110, 0},
     //  {125, 0b00000000},
     //  {135, 0b00000000},
     //  {145, 0b00000000},
@@ -286,7 +283,6 @@ TEST_CASE_METHOD(Fixture, "Glitched stop bit restarts state machine", "[project-
         {175, 0b01000000},
         {185, 0b00100000},
         {195, 0b10010000},
-        {209, 0},
     });
     CHECK(receiveByte.changes() == expectedByte);
 

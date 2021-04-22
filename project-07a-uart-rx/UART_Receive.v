@@ -32,6 +32,7 @@ module UART_Receive #(
         // Wait for falling edge
         if ((r_serial_rx == 1) && (i_serial_rx == 0)) begin
           r_state <= STATE_START_BIT;
+          r_rx_byte <= 0;
           r_count <= 0;
         end
       end
@@ -76,7 +77,6 @@ module UART_Receive #(
             r_count <= 0;
           end else begin
             r_state <= STATE_IDLE;
-            r_rx_byte <= 0;
           end
         end else begin
           r_count <= r_count + 1;
@@ -84,14 +84,9 @@ module UART_Receive #(
       end
 
       STATE_SEND_VALID : begin
-        if (r_count == CYCLES_PER_HALF_BIT-2) begin
-          r_state <= STATE_IDLE;
-          r_rx_valid <= 0;
-          r_rx_byte <= 0;
-          r_count <= 0;
-        end else begin
-          r_count <= r_count + 1;
-        end
+        // Strobe r_rx_valid for only a single clock cycle
+        r_state <= STATE_IDLE;
+        r_rx_valid <= 0;
       end
 
       default: r_state <= STATE_IDLE;
