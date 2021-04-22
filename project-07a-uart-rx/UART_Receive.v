@@ -17,6 +17,7 @@ module UART_Receive #(
 
   localparam CYCLES_PER_HALF_BIT = (CYCLES_PER_BIT)/2;
 
+  reg         r_serial_rx = 1;
   reg         r_rx_valid = 0;
   reg [7:0]   r_rx_byte = 0;
   reg [2:0]   r_state = STATE_IDLE;
@@ -24,9 +25,12 @@ module UART_Receive #(
   reg [2:0]   r_bit_count = 0;
 
   always @(posedge i_clk) begin
+    r_serial_rx <= i_serial_rx;
+
     case (r_state)
       STATE_IDLE : begin
-        if (i_serial_rx == 0) begin
+        // Wait for falling edge
+        if ((r_serial_rx == 1) && (i_serial_rx == 0)) begin
           r_state <= STATE_START_BIT;
           r_count <= 0;
         end
@@ -72,6 +76,7 @@ module UART_Receive #(
             r_count <= 0;
           end else begin
             r_state <= STATE_IDLE;
+            r_rx_byte <= 0;
           end
         end else begin
           r_count <= r_count + 1;

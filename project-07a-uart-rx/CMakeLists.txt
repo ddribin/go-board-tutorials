@@ -10,7 +10,7 @@ target_include_directories(${PROJECT_NAME}-library PUBLIC . ../verilatest)
 set(VERILATEST_TARGET ${PROJECT_NAME}-library)
 add_subdirectory(../verilatest verilatest)
 
-set(TRACE_ENABLED 0)
+set(TRACE_ENABLED 1)
 verilate(${PROJECT_NAME}-library SOURCES UART_Receive_tb.v TRACE $TRACE_ENABLED)
 verilate(${PROJECT_NAME}-library SOURCES UART_To_7Segment_Top.v TRACE $TRACE_ENABLED)
 

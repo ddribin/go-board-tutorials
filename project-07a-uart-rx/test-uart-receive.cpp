@@ -191,3 +191,103 @@ TEST_CASE_METHOD(Fixture, "Receive 2 bytes back to back", "[project-07a]")
     });
     CHECK(receiveByte.changes() == expectedByte);
 }
+
+TEST_CASE_METHOD(Fixture, "Glitched start bit restarts state machine", "[project-07a]")
+{
+    // Send 0x37 = 0011 0111
+    serialRx.addInputs({
+        {10,  0},   // Glitched start bit for 2 cycles
+        {12,  1},
+        {20,  0},   // Real start bit
+        {30,  1},   // Bit 0
+        {40,  1},   // Bit 1
+        {50,  1},   // Bit 2
+        {60,  0},   // Bit 3
+        {70,  1},   // Bit 4
+        {80,  1},   // Bit 5
+        {90,  0},   // Bit 6
+        {100, 0},   // Bit 7
+        {110, 1},   // Stop bit
+    });
+
+    bench.tick(150);
+
+    ChangeVector8 expectedValid({{115, 1}, {119, 0}});
+    CHECK(receiveValid.changes() == expectedValid);
+
+    ChangeVector8 expectedByte({
+        {35,  0b10000000},
+        {45,  0b11000000},
+        {55,  0b11100000},
+        {65,  0b01110000},
+        {75,  0b10111000},
+        {85,  0b11011100},
+        {95,  0b01101110},
+        {105, 0b00110111},
+        {119, 0},
+    });
+    CHECK(receiveByte.changes() == expectedByte);
+}
+
+TEST_CASE_METHOD(Fixture, "Glitched stop bit restarts state machine", "[project-07a]")
+{
+    bench.openTrace("/tmp/trace.vcd");
+    // Send 0x37 = 0011 0111
+    serialRx.addInputs({
+        {10,  0},   // Start bit
+        {20,  1},   // Bit 0
+        {30,  1},   // Bit 1
+        {40,  1},   // Bit 2
+        {50,  0},   // Bit 3
+        {60,  1},   // Bit 4
+        {70,  1},   // Bit 5
+        {80,  0},   // Bit 6
+        {90,  0},   // Bit 7
+        {100, 1},   // Glitched stop bit
+        {102, 0},
+        {108, 1},
+    });
+
+    // Send 0x90 = 1001 0000
+    serialRx.addInputs({
+        {110, 0},   // Start bit
+        {120, 0},   // Bit 0
+        {130, 0},   // Bit 1
+        {140, 0},   // Bit 2
+        {150, 0},   // Bit 3
+        {160, 1},   // Bit 4
+        {170, 0},   // Bit 5
+        {190, 1},   // Bit 7
+        {200, 1},   // Stop bit
+    });
+
+    bench.tick(250);
+
+    ChangeVector8 expectedValid({
+        {205, 1}, {209, 0},
+    });
+    CHECK(receiveValid.changes() == expectedValid);
+
+    ChangeVector8 expectedByte({
+        {25,  0b10000000},
+        {35,  0b11000000},
+        {45,  0b11100000},
+        {55,  0b01110000},
+        {65,  0b10111000},
+        {75,  0b11011100},
+        {85,  0b01101110},
+        {95,  0b00110111},
+        {105, 0},
+    //  {125, 0b00000000},
+    //  {135, 0b00000000},
+    //  {145, 0b00000000},
+    //  {155, 0b00000000},
+        {165, 0b10000000},
+        {175, 0b01000000},
+        {185, 0b00100000},
+        {195, 0b10010000},
+        {209, 0},
+    });
+    CHECK(receiveByte.changes() == expectedByte);
+
+}
