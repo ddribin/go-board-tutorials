@@ -1,5 +1,5 @@
 module UART_Receive #(
-  parameter CYCLES_PER_BIT
+  parameter CYCLES_PER_BIT = 217
 ) (
   input         i_clk,
   input         i_serial_rx,
@@ -9,9 +9,9 @@ module UART_Receive #(
 
   localparam STATE_IDLE       = 3'd0;
   localparam STATE_START_BIT  = 3'd1;
-  localparam STATE_DATA_BITS  = 3'd3;
-  localparam STATE_STOP_BIT   = 3'd4;
-  localparam STATE_SEND_VALID = 3'd5;
+  localparam STATE_DATA_BITS  = 3'd2;
+  localparam STATE_STOP_BIT   = 3'd3;
+  localparam STATE_SEND_VALID = 3'd4;
 
   localparam COUNT_WIDTH = $clog2(CYCLES_PER_BIT);
 
@@ -20,8 +20,8 @@ module UART_Receive #(
   reg         r_rx_valid = 0;
   reg [7:0]   r_rx_byte = 0;
   reg [2:0]   r_state = STATE_IDLE;
-  reg [COUNT_WIDTH-1:0] r_count;
-  reg [2:0]   r_bit_index;
+  reg [COUNT_WIDTH-1:0] r_count = 0;
+  reg [2:0]   r_bit_count = 0;
 
   always @(posedge i_clk) begin
     case (r_state)
@@ -37,7 +37,7 @@ module UART_Receive #(
         if (r_count == CYCLES_PER_HALF_BIT-1) begin
           if (i_serial_rx == 0) begin
             r_state <= STATE_DATA_BITS;
-            r_bit_index <= 0;
+            r_bit_count <= 0;
             r_rx_byte <= 8'd0;
             r_count <= 0;
           end else begin
@@ -52,11 +52,11 @@ module UART_Receive #(
         if (r_count == CYCLES_PER_BIT-1) begin
           // Shift in the new bit
           r_rx_byte <= {i_serial_rx, r_rx_byte[7:1]};
-          if (r_bit_index == 7) begin
+          if (r_bit_count == 7) begin
             r_state <= STATE_STOP_BIT;
             r_count <= 0;
           end else begin
-            r_bit_index <= r_bit_index + 1;
+            r_bit_count <= r_bit_count + 1;
             r_count <= 0;
           end
         end else begin

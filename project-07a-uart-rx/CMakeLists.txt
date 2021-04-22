@@ -12,6 +12,7 @@ add_subdirectory(../verilatest verilatest)
 
 set(TRACE_ENABLED 0)
 verilate(${PROJECT_NAME}-library SOURCES UART_Receive_tb.v TRACE $TRACE_ENABLED)
+verilate(${PROJECT_NAME}-library SOURCES UART_To_7Segment_Top.v TRACE $TRACE_ENABLED)
 
 find_package(Catch2 REQUIRED)
 include(CTest)
