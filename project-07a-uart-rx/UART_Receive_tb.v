@@ -7,6 +7,6 @@ module UART_Receive_tb (
 
   UART_Receive #(
     .CYCLES_PER_BIT(10)
-  ) rx (.*);
+  ) rx (.o_read_stb(), .o_serial_rx(), .*);
 
 endmodule

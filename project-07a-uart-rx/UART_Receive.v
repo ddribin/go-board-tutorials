@@ -3,6 +3,8 @@ module UART_Receive #(
 ) (
   input         i_clk,
   input         i_serial_rx,
+  output        o_read_stb,
+  output        o_serial_rx,
   output        o_rx_valid,
   output [7:0]  o_rx_byte
 );
@@ -23,6 +25,7 @@ module UART_Receive #(
   reg [2:0]   r_state = STATE_IDLE;
   reg [COUNT_WIDTH-1:0] r_count = 0;
   reg [2:0]   r_bit_count = 0;
+  reg         r_read_stb;
 
   always @(posedge i_clk) begin
     r_serial_rx <= i_serial_rx;
@@ -57,6 +60,7 @@ module UART_Receive #(
         if (r_count == CYCLES_PER_BIT-1) begin
           // Shift in the new bit
           r_rx_byte <= {i_serial_rx, r_rx_byte[7:1]};
+          r_read_stb <= 1;
           if (r_bit_count == 7) begin
             r_state <= STATE_STOP_BIT;
             r_count <= 0;
@@ -65,11 +69,13 @@ module UART_Receive #(
             r_count <= 0;
           end
         end else begin
+          r_read_stb <= 0;
           r_count <= r_count + 1;
         end
       end
 
       STATE_STOP_BIT : begin
+        r_read_stb <= 0;
         if (r_count == CYCLES_PER_BIT-1) begin
           if (i_serial_rx == 1) begin
             r_state <= STATE_SEND_VALID;
@@ -95,5 +101,7 @@ module UART_Receive #(
 
   assign o_rx_valid = r_rx_valid;
   assign o_rx_byte = r_rx_byte;
+  assign o_read_stb = r_read_stb;
+  assign o_serial_rx = r_serial_rx;
   
 endmodule

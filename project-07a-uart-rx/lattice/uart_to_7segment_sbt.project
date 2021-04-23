@@ -4,7 +4,7 @@ Version=Lattice Semiconductor Corporation iCEcube - Release: 2020.12.27943 - Bui
 ProjectName=uart_to_7segment
 Vendor=SiliconBlue
 Synthesis=synplify
-ProjectVFiles=../UART_To_7Segment_Top.v,../UART_Receive.v=work
+ProjectVFiles=../UART_To_7Segment_Top.v=work,../UART_Receive.v=work,../Nibble_To_7SD.v
 ProjectCFiles=
 CurImplementation=uart_to_7segment_Implmnt
 Implementations=uart_to_7segment_Implmnt
