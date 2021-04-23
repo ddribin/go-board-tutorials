@@ -34,11 +34,12 @@ module UART_To_7Segment_Top (
 );
 
   // Synchronizer
-  reg r_uart_rx_sync_1 = 1'b0;
-  reg r_uart_rx_sync_2 = 1'b0;
-  always @(posedge i_Clk) begin
-    {r_uart_rx_sync_2, r_uart_rx_sync_1} <= {r_uart_rx_sync_1, i_UART_RX};
-  end
+  wire w_UART_RX;
+  Synchronizer UART_RX_Sync (
+    .i_clk(i_Clk),
+    .i_input(i_UART_RX),
+    .o_input_sync(w_UART_RX)
+  );
 
   wire [7:0] w_byte;
   wire w_valid;
@@ -54,7 +55,7 @@ module UART_To_7Segment_Top (
     .CYCLES_PER_BIT(BAUD_115200)
   ) rx (
     .i_clk(i_Clk),
-    .i_serial_rx(r_uart_rx_sync_2),
+    .i_serial_rx(w_UART_RX),
     .o_read_stb(w_read_stb),
     .o_serial_rx(w_serial_rx),
     .o_rx_byte(w_byte),
@@ -105,12 +106,12 @@ module UART_To_7Segment_Top (
 
   wire [7:0] w_debug = {
     i_UART_RX,
-    r_uart_rx_sync_1,
-    r_uart_rx_sync_2,
+    w_UART_RX,
     w_serial_rx,
     w_read_stb,
     w_byte[7],
     w_valid,
+    1'b0,
     1'b0
   };
   assign io_PMOD_1 = w_debug[7];
