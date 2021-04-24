@@ -128,7 +128,8 @@ module UART_Loopback_Top (
     w_rx_valid,
     w_tx_serial,
     w_tx_done,
-    3'd0
+    w_tx_active,
+    2'd0
   };
   assign io_PMOD_1 = w_debug[7];
   assign io_PMOD_2 = w_debug[6];
