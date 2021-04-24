@@ -10,4 +10,6 @@ module Synchronizer (
     {r_input_sync_2, r_input_sync_1} <= {r_input_sync_1, i_input};
   end
 
+  assign o_input_sync = r_input_sync_2;
+
 endmodule

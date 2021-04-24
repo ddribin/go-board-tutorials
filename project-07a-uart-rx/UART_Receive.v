@@ -36,6 +36,7 @@ module UART_Receive #(
         if ((r_serial_rx == 1) && (i_serial_rx == 0)) begin
           r_state <= STATE_START_BIT;
           r_rx_byte <= 0;
+          r_read_stb <= 1;
           r_count <= 0;
         end
       end
@@ -48,11 +49,13 @@ module UART_Receive #(
             r_bit_count <= 0;
             r_rx_byte <= 8'd0;
             r_count <= 0;
+            r_read_stb <= 1;
           end else begin
             r_state <= STATE_IDLE;
           end
         end else begin
           r_count <= r_count + 1;
+          r_read_stb <= 0;
         end
       end
 
@@ -81,11 +84,13 @@ module UART_Receive #(
             r_state <= STATE_SEND_VALID;
             r_rx_valid <= 1;
             r_count <= 0;
+            r_read_stb <= 1;
           end else begin
             r_state <= STATE_IDLE;
           end
         end else begin
           r_count <= r_count + 1;
+          r_read_stb <= 0;
         end
       end
 
@@ -93,6 +98,7 @@ module UART_Receive #(
         // Strobe r_rx_valid for only a single clock cycle
         r_state <= STATE_IDLE;
         r_rx_valid <= 0;
+        r_read_stb <= 0;
       end
 
       default: r_state <= STATE_IDLE;
