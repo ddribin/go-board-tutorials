@@ -1,6 +1,7 @@
-module UART_To_7Segment_Top (
-  input i_Clk,
-  input i_UART_RX,
+module UART_Loopback_Top (
+  input   i_Clk,
+  input   i_UART_RX,
+  output  o_UART_TX,
 
   output o_Segment1_A,
   output o_Segment1_B,
@@ -41,8 +42,8 @@ module UART_To_7Segment_Top (
     .o_input_sync(w_UART_RX)
   );
 
-  wire [7:0] w_byte;
-  wire w_valid;
+  wire [7:0] w_rx_byte;
+  wire w_rx_valid;
   wire [2:0] w_state;
   wire w_read_stb;
   wire w_serial_rx;
@@ -50,38 +51,55 @@ module UART_To_7Segment_Top (
   // Baud rates @ 25MHz
   localparam BAUD_115200  = 217;
   localparam BAUD_9600    = 2604;
+  localparam BUAD_RATE    = BAUD_115200;
 
   UART_Receiver #(
-    .CYCLES_PER_BIT(BAUD_115200)
+    .CYCLES_PER_BIT(BUAD_RATE)
   ) rx (
     .i_clk(i_Clk),
     .i_serial_rx(w_UART_RX),
     .o_read_stb(w_read_stb),
     .o_serial_rx(w_serial_rx),
-    .o_rx_byte(w_byte),
-    .o_rx_valid(w_valid)
+    .o_rx_byte(w_rx_byte),
+    .o_rx_valid(w_rx_valid)
   );
 
-  reg [7:0] r_byte;
+  wire w_tx_serial;
+  wire w_tx_active;
+  wire w_tx_done;
+  UART_Transmitter #(
+    .CYCLES_PER_BIT(BUAD_RATE)
+  ) tx (
+    .i_clk(i_Clk),
+    .i_tx_byte(w_rx_byte),
+    .i_tx_dv(w_rx_valid),
+    .o_tx_active(w_tx_active),
+    .o_tx_serial(w_tx_serial),
+    .o_tx_done(w_tx_done)
+  );
+
+  reg [7:0] r_rx_byte;
   always @(posedge i_Clk) begin
-    if (w_valid) begin
-      r_byte <= w_byte;
+    if (w_rx_valid) begin
+      r_rx_byte <= w_rx_byte;
     end
   end
 
   wire [6:0] w_Segments1;
   Nibble_To_7SD Segment1 (
     .i_Clk(i_Clk),
-    .i_Nibble(r_byte[7:4]),
+    .i_Nibble(r_rx_byte[7:4]),
     .o_Segments(w_Segments1)
   );
 
   wire [6:0] w_Segments2;
   Nibble_To_7SD Segment2 (
     .i_Clk(i_Clk),
-    .i_Nibble(r_byte[3:0]),
+    .i_Nibble(r_rx_byte[3:0]),
     .o_Segments(w_Segments2)
   );
+
+  assign o_UART_TX = w_tx_serial;
 
   assign o_Segment1_A = ~w_Segments1[0];
   assign o_Segment1_B = ~w_Segments1[1];
@@ -99,20 +117,18 @@ module UART_To_7Segment_Top (
   assign o_Segment2_F = ~w_Segments2[5];
   assign o_Segment2_G = ~w_Segments2[6];
 
-  assign o_LED_1 = r_byte[3];
-  assign o_LED_2 = r_byte[2];
-  assign o_LED_3 = r_byte[1];
-  assign o_LED_4 = r_byte[0];
+  assign o_LED_1 = r_rx_byte[3];
+  assign o_LED_2 = r_rx_byte[2];
+  assign o_LED_3 = r_rx_byte[1];
+  assign o_LED_4 = r_rx_byte[0];
 
   wire [7:0] w_debug = {
     i_UART_RX,
-    w_UART_RX,
-    w_serial_rx,
-    w_read_stb,
-    w_byte[7],
-    w_valid,
-    1'b0,
-    1'b0
+    w_rx_byte[7],
+    w_rx_valid,
+    w_tx_serial,
+    w_tx_done,
+    3'd0
   };
   assign io_PMOD_1 = w_debug[7];
   assign io_PMOD_2 = w_debug[6];
