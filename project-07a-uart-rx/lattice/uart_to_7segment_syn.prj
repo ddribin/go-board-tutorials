@@ -3,9 +3,9 @@
 #project files
 
 add_file -verilog -lib work "../UART_To_7Segment_Top.v" 
-add_file -verilog -lib work "../UART_Receive.v" 
 add_file -verilog -lib work "../Nibble_To_7SD.v" 
 add_file -verilog -lib work "../Synchronizer.v" 
+add_file -verilog -lib work "../UART_Receiver.v" 
 #implementation: "uart_to_7segment_Implmnt"
 impl -add uart_to_7segment_Implmnt -type fpga
 
