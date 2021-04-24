@@ -11,7 +11,7 @@ set(VERILATEST_TARGET ${PROJECT_NAME}-library)
 add_subdirectory(../verilatest verilatest)
 
 set(TRACE_ENABLED 0)
-verilate(${PROJECT_NAME}-library SOURCES UART_Receive_tb.v TRACE $TRACE_ENABLED)
+verilate(${PROJECT_NAME}-library SOURCES UART_Receiver_tb.v TRACE $TRACE_ENABLED)
 verilate(${PROJECT_NAME}-library SOURCES UART_To_7Segment_Top.v TRACE $TRACE_ENABLED)
 
 find_package(Catch2 REQUIRED)
@@ -19,7 +19,7 @@ include(CTest)
 include(Catch)
 
 add_executable(${PROJECT_NAME}-tests
-    test-uart-receive.cpp
+    test-uart-receiver.cpp
     ../common/test-common.hpp
     ../common/test-main.cpp
 )

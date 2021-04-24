@@ -51,7 +51,7 @@ module UART_To_7Segment_Top (
   localparam BAUD_115200  = 217;
   localparam BAUD_9600    = 2604;
 
-  UART_Receive #(
+  UART_Receiver #(
     .CYCLES_PER_BIT(BAUD_115200)
   ) rx (
     .i_clk(i_Clk),

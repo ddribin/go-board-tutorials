@@ -1,12 +1,12 @@
 #include "test-common.hpp"
-#include "VUART_Receive_tb.h"
+#include "VUART_Receiver_tb.h"
 
-struct VUART_Receive_Adapter : public VUART_Receive_tb
+struct VUART_Receiver_Adapter : public VUART_Receiver_tb
 {
     void setClock(uint64_t clock) { i_clk = clock; }
 };
 
-using UUT = VUART_Receive_Adapter;
+using UUT = VUART_Receiver_Adapter;
 
 struct UARTReceiveFixture {
     using SignalPublisher8 = SignalPublisher<uint8_t, UUT>;

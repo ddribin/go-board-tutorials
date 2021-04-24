@@ -1,4 +1,4 @@
-module UART_Receive #(
+module UART_Receiver #(
   parameter CYCLES_PER_BIT = 217
 ) (
   input         i_clk,
