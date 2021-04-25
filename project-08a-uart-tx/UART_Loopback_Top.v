@@ -64,27 +64,20 @@ module UART_Loopback_Top (
     .o_rx_valid(w_rx_valid)
   );
 
-  reg [7:0] r_rx_byte;
-  reg r_rx_valid;
-  wire w_tx_dv_1 = (~w_tx_active & w_rx_valid);
-  wire w_tx_dv_2 = (w_tx_done & w_rx_valid);
-  wire w_tx_dv_3 = (w_tx_done & r_rx_valid);
-  wire w_tx_dv = w_tx_dv_1 | w_tx_dv_2 | w_tx_dv_3;
-  wire [7:0] w_drd_byte = (
-    ({8{w_tx_dv_1}} & w_rx_byte) |
-    ({8{w_tx_dv_2}} & w_rx_byte) |
-    ({8{w_tx_dv_3}} & r_rx_byte)
+  wire w_fifo_not_empty;
+  wire [7:0] w_data_out;
+  wire w_shift_out = ~w_tx_active | w_tx_done;
+  FIFO_2word_FWFT fifo (
+    .clk(i_Clk),
+    .reset(0),
+    .shift_in(w_rx_valid),
+    .data_in(w_rx_byte),
+
+    .shift_out(w_shift_out),
+    .fifo_not_empty(w_fifo_not_empty),
+    .fifo_full(),
+    .data_out(w_data_out)
   );
-  
-  always @(posedge i_Clk) begin
-    if (w_rx_valid) begin
-      r_rx_byte <= w_rx_byte;
-      r_rx_valid <= w_rx_valid;
-    end
-    if (w_tx_dv) begin
-      r_rx_valid <= 0;
-    end
-  end
 
   wire w_tx_serial;
   wire w_tx_active;
@@ -94,19 +87,19 @@ module UART_Loopback_Top (
     .CYCLES_PER_BIT(BUAD_RATE)
   ) tx (
     .i_clk(i_Clk),
-    .i_tx_byte(w_drd_byte),
-    .i_tx_dv(w_tx_dv),
+    .i_tx_byte(w_data_out),
+    .i_tx_dv(w_fifo_not_empty),
     .o_tx_active(w_tx_active),
     .o_tx_serial(w_tx_serial),
     .o_tx_done(w_tx_done)
   );
 
-  // reg [7:0] r_rx_byte;
-  // always @(posedge i_Clk) begin
-  //   if (w_rx_valid) begin
-  //     r_rx_byte <= w_rx_byte;
-  //   end
-  // end
+  reg [7:0] r_rx_byte;
+  always @(posedge i_Clk) begin
+    if (w_rx_valid) begin
+      r_rx_byte <= w_rx_byte;
+    end
+  end
 
   wire [6:0] w_Segments1;
   Nibble_To_7SD Segment1 (
@@ -147,10 +140,10 @@ module UART_Loopback_Top (
 
   wire [7:0] w_debug = {
     i_UART_RX,
-    w_rx_byte[7],
+    w_UART_RX,
     w_rx_valid,
-    r_rx_valid,
-    w_tx_dv,
+    w_fifo_not_empty,
+    w_shift_out,
     w_tx_serial,
     w_tx_active,
     w_tx_done

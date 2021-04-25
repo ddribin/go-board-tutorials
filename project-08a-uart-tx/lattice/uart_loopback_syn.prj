@@ -8,6 +8,7 @@ add_file -verilog -lib work "../Synchronizer.v"
 add_file -verilog -lib work "../UART_Loopback_Top.v" 
 add_file -verilog -lib work "../UART_Receiver.v" 
 add_file -verilog -lib work "../UART_Transmitter.v" 
+add_file -verilog -lib work "../FIFO_2word_FWFT.sv" 
 #implementation: "uart_loopback_Implmnt"
 impl -add uart_loopback_Implmnt -type fpga
 
