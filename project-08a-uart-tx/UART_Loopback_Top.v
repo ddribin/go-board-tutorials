@@ -64,26 +64,49 @@ module UART_Loopback_Top (
     .o_rx_valid(w_rx_valid)
   );
 
+  reg [7:0] r_rx_byte;
+  reg r_rx_valid;
+  wire w_tx_dv_1 = (~w_tx_active & w_rx_valid);
+  wire w_tx_dv_2 = (w_tx_done & w_rx_valid);
+  wire w_tx_dv_3 = (w_tx_done & r_rx_valid);
+  wire w_tx_dv = w_tx_dv_1 | w_tx_dv_2 | w_tx_dv_3;
+  wire [7:0] w_drd_byte = (
+    ({8{w_tx_dv_1}} & w_rx_byte) |
+    ({8{w_tx_dv_2}} & w_rx_byte) |
+    ({8{w_tx_dv_3}} & r_rx_byte)
+  );
+  
+  always @(posedge i_Clk) begin
+    if (w_rx_valid) begin
+      r_rx_byte <= w_rx_byte;
+      r_rx_valid <= w_rx_valid;
+    end
+    if (w_tx_dv) begin
+      r_rx_valid <= 0;
+    end
+  end
+
   wire w_tx_serial;
   wire w_tx_active;
   wire w_tx_done;
+
   UART_Transmitter #(
     .CYCLES_PER_BIT(BUAD_RATE)
   ) tx (
     .i_clk(i_Clk),
-    .i_tx_byte(w_rx_byte),
-    .i_tx_dv(w_rx_valid),
+    .i_tx_byte(w_drd_byte),
+    .i_tx_dv(w_tx_dv),
     .o_tx_active(w_tx_active),
     .o_tx_serial(w_tx_serial),
     .o_tx_done(w_tx_done)
   );
 
-  reg [7:0] r_rx_byte;
-  always @(posedge i_Clk) begin
-    if (w_rx_valid) begin
-      r_rx_byte <= w_rx_byte;
-    end
-  end
+  // reg [7:0] r_rx_byte;
+  // always @(posedge i_Clk) begin
+  //   if (w_rx_valid) begin
+  //     r_rx_byte <= w_rx_byte;
+  //   end
+  // end
 
   wire [6:0] w_Segments1;
   Nibble_To_7SD Segment1 (
@@ -126,10 +149,12 @@ module UART_Loopback_Top (
     i_UART_RX,
     w_rx_byte[7],
     w_rx_valid,
+    r_rx_valid,
+    w_tx_dv,
     w_tx_serial,
-    w_tx_done,
     w_tx_active,
-    2'd0
+    w_tx_done
+//    1'd0
   };
   assign io_PMOD_1 = w_debug[7];
   assign io_PMOD_2 = w_debug[6];
