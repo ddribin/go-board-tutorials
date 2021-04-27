@@ -66,24 +66,13 @@ module UART_Loopback_Top (
 
   wire w_fifo_not_empty;
   wire [7:0] w_data_out;
-  wire w_shift_out = ~w_tx_active | w_tx_done;
-  FIFO_2word_FWFT fifo_fwft (
-    .clk(i_Clk),
-    .reset(0),
-    .shift_in(w_rx_valid),
-    .data_in(w_rx_byte),
-
-    .shift_out(w_shift_out),
-    .fifo_not_empty(),
-    .fifo_full(),
-    .data_out()
-  );
+  wire w_rd_en = ~w_tx_active | w_tx_done;
 
   FIFO fifo (
     .i_clk(i_Clk),
     .i_wr_en(w_rx_valid),
     .i_wr_data(w_rx_byte),
-    .i_rd_en(w_shift_out),
+    .i_rd_en(w_rd_en),
     .o_fifo_not_empty(w_fifo_not_empty),
     .o_rd_data(w_data_out)
   );
@@ -152,7 +141,7 @@ module UART_Loopback_Top (
     w_UART_RX,
     w_rx_valid,
     w_fifo_not_empty,
-    w_shift_out,
+    w_rd_en,
     w_tx_serial,
     w_tx_active,
     w_tx_done
