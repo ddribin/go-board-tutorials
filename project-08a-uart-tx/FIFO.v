@@ -16,14 +16,16 @@ module FIFO (
   assign o_rd_data = i_wr_en ? i_wr_data : r_buffer;
 
   always @(posedge i_clk) begin
-    if (i_wr_en & i_rd_en) begin
-      r_fifo_not_empty <= 1'b0;
-    end else if (i_wr_en) begin
-      r_fifo_not_empty <= 1'b1;
+    if (i_wr_en) begin
       r_buffer <= i_wr_data;
+    end
+  end
+
+  always @(posedge i_clk) begin
+    if (i_wr_en & !i_rd_en) begin
+      r_fifo_not_empty <= 1'b1;
     end else if (i_rd_en) begin
       r_fifo_not_empty <= 1'b0;
-      r_buffer <= 0;
     end
   end
 

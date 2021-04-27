@@ -4,7 +4,7 @@ Version=Lattice Semiconductor Corporation iCEcube - Release: 2020.12.27943 - Bui
 ProjectName=uart_loopback
 Vendor=SiliconBlue
 Synthesis=synplify
-ProjectVFiles=../Nibble_To_7SD.v=work,../Seven_Segment_Display.vh=work,../Synchronizer.v=work,../UART_Loopback_Top.v=work,../UART_Receiver.v=work,../UART_Transmitter.v=work,../FIFO_2word_FWFT.sv
+ProjectVFiles=../Nibble_To_7SD.v=work,../Seven_Segment_Display.vh=work,../Synchronizer.v=work,../UART_Loopback_Top.v=work,../UART_Receiver.v=work,../UART_Transmitter.v=work,../FIFO_2word_FWFT.sv,../FIFO.v
 ProjectCFiles=
 CurImplementation=uart_loopback_Implmnt
 Implementations=uart_loopback_Implmnt

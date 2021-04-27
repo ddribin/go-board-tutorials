@@ -65,7 +65,7 @@ TEST_CASE_METHOD(Fixture, "FIFO: Write data is read later", "[project-8a]")
 
     REQUIRE(fifoNotEmpty.changes() == ChangeVector8({{1, 1}, {5, 0}}));
 
-    REQUIRE(readData.changes() == ChangeVector8({{1, 0x37}, {5, 0}}));
+    REQUIRE(readData.changes() == ChangeVector8({{1, 0x37}}));
 }
 
 TEST_CASE_METHOD(Fixture, "FIFO: Write data is read on same clock", "[project-8a]")
@@ -79,7 +79,7 @@ TEST_CASE_METHOD(Fixture, "FIFO: Write data is read on same clock", "[project-8a
 
     REQUIRE(fifoNotEmpty.changes() == ChangeVector8({{1, 1}, {2, 0}}));
 
-    REQUIRE(readData.changes() == ChangeVector8({{1, 0x37}, {2, 0}}));
+    REQUIRE(readData.changes() == ChangeVector8({{1, 0x37}}));
 }
 
 TEST_CASE_METHOD(Fixture, "FIFO: Write data is read on next clock", "[project-8a]")
@@ -93,7 +93,7 @@ TEST_CASE_METHOD(Fixture, "FIFO: Write data is read on next clock", "[project-8a
 
     REQUIRE(fifoNotEmpty.changes() == ChangeVector8({{1, 1}, {2, 0}}));
 
-    REQUIRE(readData.changes() == ChangeVector8({{1, 0x37}, {2, 0}}));
+    REQUIRE(readData.changes() == ChangeVector8({{1, 0x37}}));
 }
 
 TEST_CASE_METHOD(Fixture, "FIFO: Write data is read +2", "[project-8a]")
@@ -107,5 +107,5 @@ TEST_CASE_METHOD(Fixture, "FIFO: Write data is read +2", "[project-8a]")
 
     REQUIRE(fifoNotEmpty.changes() == ChangeVector8({{1, 1}, {3, 0}}));
 
-    REQUIRE(readData.changes() == ChangeVector8({{1, 0x37}, {3, 0}}));
+    REQUIRE(readData.changes() == ChangeVector8({{1, 0x37}}));
 }
