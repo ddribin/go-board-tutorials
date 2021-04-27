@@ -13,6 +13,7 @@ add_subdirectory(../verilatest verilatest)
 set(TRACE_ENABLED 1)
 verilate(${PROJECT_NAME}-library SOURCES UART_Transmitter_tb.v TRACE $TRACE_ENABLED)
 verilate(${PROJECT_NAME}-library SOURCES FIFO_2word_FWFT.sv TRACE $TRACE_ENABLED)
+verilate(${PROJECT_NAME}-library SOURCES FIFO.v TRACE $TRACE_ENABLED)
 verilate(${PROJECT_NAME}-library SOURCES UART_Loopback_Top.v TRACE $TRACE_ENABLED)
 
 find_package(Catch2 REQUIRED)
@@ -21,6 +22,8 @@ include(Catch)
 
 add_executable(${PROJECT_NAME}-tests
     test-uart-transmitter.cpp
+    test-fifo.cpp
+    test-fifo-fwft.cpp
     ../common/test-common.hpp
     ../common/test-main.cpp
 )
