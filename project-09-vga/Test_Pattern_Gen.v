@@ -101,7 +101,8 @@ module Test_Pattern_Gen
   /////////////////////////////////////////////////////////////////////////////
   // Pattern 4: Checkerboard white/black
   /////////////////////////////////////////////////////////////////////////////
-  assign Pattern_Red[4] = w_Col_Count[5] ^ w_Row_Count[5] ? {VIDEO_WIDTH{1'b1}} : 0;
+  wire [VIDEO_WIDTH-1:0] pattern_4 = w_Col_Count[5] ^ w_Row_Count[5] ? {VIDEO_WIDTH{1'b1}} : 0;
+  assign Pattern_Red[4] = (w_Col_Count < ACTIVE_COLS && w_Row_Count < ACTIVE_ROWS) ? pattern_4 : 0;
   assign Pattern_Grn[4] = Pattern_Red[4];
   assign Pattern_Blu[4] = Pattern_Red[4];
   
