@@ -133,17 +133,23 @@ module Test_Pattern_Gen
 				        w_Col_Count < w_Bar_Width*7 ? 6 : 7;
 				  
   // Implement Truth Table above with Conditional Assignments
-  assign Pattern_Red[5] = (w_Bar_Select == 4 || w_Bar_Select == 5 ||
+  wire [VIDEO_WIDTH-1:0] pattern_5_red =
+                          (w_Bar_Select == 4 || w_Bar_Select == 5 ||
                            w_Bar_Select == 6 || w_Bar_Select == 7) ? 
                           {VIDEO_WIDTH{1'b1}} : 0;
+  assign Pattern_Red[5] = (w_Col_Count < ACTIVE_COLS && w_Row_Count < ACTIVE_ROWS) ? pattern_5_red : 0;
 					 
-  assign Pattern_Grn[5] = (w_Bar_Select == 2 || w_Bar_Select == 3 ||
+  wire [VIDEO_WIDTH-1:0] pattern_5_green =
+                          (w_Bar_Select == 2 || w_Bar_Select == 3 ||
                            w_Bar_Select == 6 || w_Bar_Select == 7) ? 
                           {VIDEO_WIDTH{1'b1}} : 0;
+  assign Pattern_Grn[5] = (w_Col_Count < ACTIVE_COLS && w_Row_Count < ACTIVE_ROWS) ? pattern_5_green : 0;
 					 					 
-  assign Pattern_Blu[5] = (w_Bar_Select == 1 || w_Bar_Select == 3 ||
+  wire [VIDEO_WIDTH-1:0] pattern_5_blue =
+                          (w_Bar_Select == 1 || w_Bar_Select == 3 ||
                            w_Bar_Select == 5 || w_Bar_Select == 7) ?
                           {VIDEO_WIDTH{1'b1}} : 0;
+  assign Pattern_Blu[5] = (w_Col_Count < ACTIVE_COLS && w_Row_Count < ACTIVE_ROWS) ? pattern_5_blue : 0;
 
 
   /////////////////////////////////////////////////////////////////////////////
