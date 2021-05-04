@@ -1,4 +1,3 @@
-// This module is designed for 640x480 with a 25 MHz input clock.
 // All test patterns are being generated all the time.  This makes use of one
 // of the benefits of FPGAs, they are highly parallelizable.  Many different
 // things can all be happening at the same time.  In this case, there are several
@@ -16,7 +15,7 @@
 // Pattern 6: White Box with Border (2 pixels)
 
 // Note: Comment out this line when building in iCEcube2:
-`include "Sync_To_Count.v"
+// `include "Sync_To_Count.v"
 
 
 module Test_Pattern_Gen 
@@ -121,6 +120,7 @@ module Test_Pattern_Gen
   // 1 1 0       6        Yellow
   // 1 1 1       7        White
   /////////////////////////////////////////////////////////////////////////////
+  /* verilator lint_off WIDTH */
   assign w_Bar_Width = ACTIVE_COLS/8;
   
   assign w_Bar_Select = w_Col_Count < w_Bar_Width*1 ? 0 : 

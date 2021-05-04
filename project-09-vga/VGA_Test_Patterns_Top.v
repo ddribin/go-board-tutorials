@@ -130,6 +130,13 @@ module VGA_Test_Patterns_Top
       r_TP_Index <= w_RX_Byte[3:0];
   end
    
+  wire w_HSync_Start;
+  wire w_VSync_Start;
+  wire w_HSync_TP;
+  wire w_VSync_TP;
+  wire w_HSync_Porch;
+  wire w_VSync_Porch;
+
   // Generates Sync Pulses to run VGA
   VGA_Sync_Pulses #(.TOTAL_COLS(c_TOTAL_COLS),
                     .TOTAL_ROWS(c_TOTAL_ROWS),
