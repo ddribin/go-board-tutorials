@@ -156,9 +156,11 @@ module Test_Pattern_Gen
   // Pattern 6: Black With White Border
   // Creates a black screen with a white border 2 pixels wide around outside.
   /////////////////////////////////////////////////////////////////////////////
-  assign Pattern_Red[6] = (w_Row_Count <= 1 || w_Row_Count >= ACTIVE_ROWS-1-1 ||
+  wire [VIDEO_WIDTH-1:0] pattern_6 = 
+                          (w_Row_Count <= 1 || w_Row_Count >= ACTIVE_ROWS-1-1 ||
                            w_Col_Count <= 1 || w_Col_Count >= ACTIVE_COLS-1-1) ?
                           {VIDEO_WIDTH{1'b1}} : 0;
+  assign Pattern_Red[6] = (w_Col_Count < ACTIVE_COLS && w_Row_Count < ACTIVE_ROWS) ? pattern_6 : 0;
   assign Pattern_Grn[6] = Pattern_Red[6];
   assign Pattern_Blu[6] = Pattern_Red[6];
   
