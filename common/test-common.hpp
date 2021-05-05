@@ -12,9 +12,9 @@
 
 template<class Core>
 struct BaseFixture {
-    using SignalPublisher8 = SignalPublisher<uint8_t, Core>;
-    using SignalObserver8 = SignalObserver<uint8_t, Core>;
-    using SignalObserver16 = SignalObserver<uint16_t, Core>;
+    using Input8 = SignalPublisher<uint8_t, Core>;
+    using Output8 = SignalObserver<uint8_t, Core>;
+    using Output16 = SignalObserver<uint16_t, Core>;
     TestBench<Core> bench;
     Core& core;
     BaseFixture() :

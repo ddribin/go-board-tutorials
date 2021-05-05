@@ -9,13 +9,13 @@ struct VVideo_Sync_Generator_Adapter : public VVideo_Sync_Generator_tb
 using UUT = VVideo_Sync_Generator_Adapter;
 
 struct VideoSyncGeneratorFixture : BaseFixture<UUT> {
-    SignalObserver8 hsync;
-    SignalObserver8 hblank;
-    SignalObserver8 vsync;
-    SignalObserver8 vblank;
-    SignalObserver8 visible;
-    SignalObserver16 hpos;
-    SignalObserver16 vpos;
+    Output8 hsync;
+    Output8 hblank;
+    Output8 vsync;
+    Output8 vblank;
+    Output8 visible;
+    Output16 hpos;
+    Output16 vpos;
     VideoSyncGeneratorFixture() :
         hsync(&UUT::o_hsync, bench),
         hblank(&UUT::o_hblank, bench),

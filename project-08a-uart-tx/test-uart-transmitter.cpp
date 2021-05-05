@@ -9,11 +9,11 @@ struct VUART_Transmitter_Adapter : public VUART_Transmitter_tb
 using UUT = VUART_Transmitter_Adapter;
 
 struct UARTTransmitterFixture : BaseFixture<UUT> {
-    SignalPublisher8 transmitByte;
-    SignalPublisher8 transmitValid;
-    SignalObserver8 transmitSerial;
-    SignalObserver8 transmitActive;
-    SignalObserver8 transmitDone;
+    Input8 transmitByte;
+    Input8 transmitValid;
+    Output8 transmitSerial;
+    Output8 transmitActive;
+    Output8 transmitDone;
     UARTTransmitterFixture() :
         transmitByte(&UUT::i_tx_byte, bench),
         transmitValid(&UUT::i_tx_dv, bench),
