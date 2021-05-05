@@ -8,18 +8,13 @@ struct VUART_Transmitter_Adapter : public VUART_Transmitter_tb
 
 using UUT = VUART_Transmitter_Adapter;
 
-struct UARTTransmitterFixture {
-    using SignalPublisher8 = SignalPublisher<uint8_t, UUT>;
-    using SignalObserver8 = SignalObserver<uint8_t, UUT>;
-    TestBench<UUT> bench;
-    UUT& core;
+struct UARTTransmitterFixture : BaseFixture<UUT> {
     SignalPublisher8 transmitByte;
     SignalPublisher8 transmitValid;
     SignalObserver8 transmitSerial;
     SignalObserver8 transmitActive;
     SignalObserver8 transmitDone;
     UARTTransmitterFixture() :
-        core(bench.core()),
         transmitByte(&UUT::i_tx_byte, bench),
         transmitValid(&UUT::i_tx_dv, bench),
         transmitSerial(&UUT::o_tx_serial, bench),

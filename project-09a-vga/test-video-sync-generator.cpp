@@ -8,12 +8,7 @@ struct VVideo_Sync_Generator_Adapter : public VVideo_Sync_Generator_tb
 
 using UUT = VVideo_Sync_Generator_Adapter;
 
-struct VideoSyncGeneratorFixture {
-    using SignalPublisher8 = SignalPublisher<uint8_t, UUT>;
-    using SignalObserver8 = SignalObserver<uint8_t, UUT>;
-    using SignalObserver16 = SignalObserver<uint16_t, UUT>;
-    TestBench<UUT> bench;
-    UUT& core;
+struct VideoSyncGeneratorFixture : BaseFixture<UUT> {
     SignalObserver8 hsync;
     SignalObserver8 hblank;
     SignalObserver8 vsync;
@@ -22,7 +17,6 @@ struct VideoSyncGeneratorFixture {
     SignalObserver16 hpos;
     SignalObserver16 vpos;
     VideoSyncGeneratorFixture() :
-        core(bench.core()),
         hsync(&UUT::o_hsync, bench),
         hblank(&UUT::o_hblank, bench),
         vsync(&UUT::o_vsync, bench),
