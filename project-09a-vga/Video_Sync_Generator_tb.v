@@ -7,8 +7,8 @@ module Video_Sync_Generator_tb (
   output o_vblank,
   output o_visible,
 
-  output [8:0] o_hpos,
-  output [8:0] o_vpos
+  output [9:0] o_hpos,
+  output [9:0] o_vpos
 );
 
   Video_Sync_Generator #(

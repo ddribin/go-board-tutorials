@@ -23,8 +23,8 @@ module Video_Sync_Generator #(
   output o_vblank,
   output o_visible,
 
-  output [8:0] o_hpos,
-  output [8:0] o_vpos
+  output [9:0] o_hpos,
+  output [9:0] o_vpos
 );
 
   localparam H_BLANK_START = H_VISIBLE + H_RIGHT_BORDER;
@@ -39,8 +39,8 @@ module Video_Sync_Generator #(
 
   reg       r_hsync;
   reg       r_vsync;
-  reg [8:0] r_hpos = 0;
-  reg [8:0] r_vpos = 0;
+  reg [9:0] r_hpos = 0;
+  reg [9:0] r_vpos = 0;
 
   wire w_end_of_line = r_hpos == H_TOTAL-1;
 
