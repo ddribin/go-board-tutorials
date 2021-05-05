@@ -20,18 +20,13 @@ struct UARTTransmitterFixture {
     SignalObserver8 transmitDone;
     UARTTransmitterFixture() :
         core(bench.core()),
-        transmitByte(&UUT::i_tx_byte),
-        transmitValid(&UUT::i_tx_dv),
-        transmitSerial(&UUT::o_tx_serial),
-        transmitActive(&UUT::o_tx_active),
-        transmitDone(&UUT::o_tx_done)
+        transmitByte(&UUT::i_tx_byte, bench),
+        transmitValid(&UUT::i_tx_dv, bench),
+        transmitSerial(&UUT::o_tx_serial, bench),
+        transmitActive(&UUT::o_tx_active, bench),
+        transmitDone(&UUT::o_tx_done, bench)
     {
-        bench.addInput(transmitByte);
-        bench.addInput(transmitValid);
-        bench.addOutput(transmitSerial);
-        bench.addOutput(transmitActive);
-        bench.addOutput(transmitDone);
-    };
+    }
 };
 
 using Fixture = UARTTransmitterFixture;

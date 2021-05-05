@@ -23,22 +23,15 @@ struct VideoSyncGeneratorFixture {
     SignalObserver16 vpos;
     VideoSyncGeneratorFixture() :
         core(bench.core()),
-        hsync(&UUT::o_hsync),
-        hblank(&UUT::o_hblank),
-        vsync(&UUT::o_vsync),
-        vblank(&UUT::o_vblank),
-        visible(&UUT::o_visible),
-        hpos(&UUT::o_hpos),
-        vpos(&UUT::o_vpos)
+        hsync(&UUT::o_hsync, bench),
+        hblank(&UUT::o_hblank, bench),
+        vsync(&UUT::o_vsync, bench),
+        vblank(&UUT::o_vblank, bench),
+        visible(&UUT::o_visible, bench),
+        hpos(&UUT::o_hpos, bench),
+        vpos(&UUT::o_vpos, bench)
     {
-        bench.addOutput(hsync);
-        bench.addOutput(hblank);
-        bench.addOutput(vsync);
-        bench.addOutput(vblank);
-        bench.addOutput(visible);
-        bench.addOutput(hpos);
-        bench.addOutput(vpos);
-    };
+    }
 };
 
 using Fixture = VideoSyncGeneratorFixture;
