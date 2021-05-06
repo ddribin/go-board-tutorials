@@ -8,7 +8,7 @@ struct VVideo_Sync_Generator_Adapter : public VVideo_Sync_Generator_tb
 
 using UUT = VVideo_Sync_Generator_Adapter;
 
-struct VideoSyncGeneratorFixture : BaseFixture<UUT> {
+struct VideoSyncGeneratorFixture : TestFixture<UUT> {
     Output8 hsync;
     Output8 hblank;
     Output8 vsync;

@@ -5,22 +5,8 @@
 #include "TestBench.hpp"
 #include "SignalPublisher.hpp"
 #include "SignalObserver.hpp"
+#include "TestFixture.hpp"
 #include <verilated.h>
 
 // This must be last so any "operator <<"" overloads work properly for test failures
 #include <catch2/catch.hpp>
-
-template<class Core>
-struct BaseFixture {
-    using Input8 = SignalPublisher<uint8_t, Core>;
-    using Output8 = SignalObserver<uint8_t, Core>;
-    using Output16 = SignalObserver<uint16_t, Core>;
-    TestBench<Core> bench;
-    Core& core;
-    BaseFixture() :
-        core(bench.core())
-    {
-    }
-
-    virtual ~BaseFixture() {}
-};

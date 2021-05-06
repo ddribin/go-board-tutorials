@@ -8,7 +8,7 @@ struct VUART_Transmitter_Adapter : public VUART_Transmitter_tb
 
 using UUT = VUART_Transmitter_Adapter;
 
-struct UARTTransmitterFixture : BaseFixture<UUT> {
+struct UARTTransmitterFixture : TestFixture<UUT> {
     Input8 transmitByte;
     Input8 transmitValid;
     Output8 transmitSerial;
