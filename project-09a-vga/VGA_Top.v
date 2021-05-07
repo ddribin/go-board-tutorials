@@ -106,23 +106,31 @@ module VGA_Top (
   wire [9:0] w_hpos;
   wire [9:0] w_vpos;
   wire w_visible;
+  wire w_vblank;
   Video_Sync_Generator sync_gen (
     .i_clk(i_Clk),
     .o_hsync(w_hsync),
     .o_hblank(),
     .o_vsync(w_vsync),
-    .o_vblank(),
+    .o_vblank(w_vblank),
     .o_hpos(w_hpos),
     .o_vpos(w_vpos),
     .o_visible(w_visible)
   );
+
+  reg [3:0] r_pattern;
+  always @(posedge i_Clk) begin
+    if (w_vblank) begin
+      r_pattern <= r_rx_byte[3:0];
+    end
+  end
 
   wire [2:0] w_red;
   wire [2:0] w_grn;
   wire [2:0] w_blu;
   Test_Pattern_Generator test_pattern (
     .i_clk(i_Clk),
-    .i_pattern(r_rx_byte[3:0]),
+    .i_pattern(r_pattern),
     .i_hpos(w_hpos),
     .i_vpos(w_vpos),
     .i_visible(w_visible),
