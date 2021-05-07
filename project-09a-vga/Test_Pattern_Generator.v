@@ -30,9 +30,52 @@ module Test_Pattern_Generator #(
   /////////////////////////////////////////////////////////////////////////////
   // Pattern 1: All red
   /////////////////////////////////////////////////////////////////////////////
-  assign pattern_red[1] = {3{1'b0}};
+  assign pattern_red[1] = {3{1'b1}};
   assign pattern_grn[1] = 0;
   assign pattern_blu[1] = 0;
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Pattern 2: All green
+  /////////////////////////////////////////////////////////////////////////////
+  assign pattern_red[2] = 0;
+  assign pattern_grn[2] = {3{1'b1}};
+  assign pattern_blu[2] = 0;
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Pattern 3: All blue
+  /////////////////////////////////////////////////////////////////////////////
+  assign pattern_red[3] = 0;
+  assign pattern_grn[3] = 0;
+  assign pattern_blu[3] = {3{1'b1}};
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Pattern 4: Color bars
+  /////////////////////////////////////////////////////////////////////////////
+  localparam BAR_WIDTH = H_VISIBLE/8;
+  wire [2:0] w_bar =
+    i_hpos < BAR_WIDTH*1 ? 3'd0 :
+    i_hpos < BAR_WIDTH*2 ? 3'd1 :
+    i_hpos < BAR_WIDTH*3 ? 3'd2 :
+    i_hpos < BAR_WIDTH*4 ? 3'd3 :
+    i_hpos < BAR_WIDTH*5 ? 3'd4 :
+    i_hpos < BAR_WIDTH*6 ? 3'd5 :
+    i_hpos < BAR_WIDTH*7 ? 3'd6 :
+    i_hpos < BAR_WIDTH*8 ? 3'd7 : 3'd0;
+
+  assign pattern_red[4] = {3{~w_bar[1]}};
+  assign pattern_grn[4] = {3{~w_bar[2]}};
+  assign pattern_blu[4] = {3{~w_bar[0]}};
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Pattern 5: Black with white border
+  /////////////////////////////////////////////////////////////////////////////
+  localparam BORDER_WIDTH = 2;
+  wire [2:0] w_border =
+    ((i_hpos < BORDER_WIDTH) || (i_hpos > (H_VISIBLE - BORDER_WIDTH - 1)) ||
+     (i_vpos < BORDER_WIDTH) || (i_vpos > (V_VISIBLE - BORDER_WIDTH - 1))) ? 3'd3 : 3'd0;
+  assign pattern_red[5] = w_border;
+  assign pattern_grn[5] = w_border;
+  assign pattern_blu[5] = w_border;
 
   /////////////////////////////////////////////////////////////////////////////
   // Pattern 6: Plaid
@@ -46,7 +89,7 @@ module Test_Pattern_Generator #(
   /////////////////////////////////////////////////////////////////////////////
   always @(posedge i_clk) begin
     case (i_pattern)
-      4'd1, 4'd6: begin
+      4'd1, 4'd2, 4'd3, 4'd4, 4'd5, 4'd6: begin
         o_red_video <= i_visible? pattern_red[i_pattern] : 3'd0;
         o_grn_video <= i_visible? pattern_grn[i_pattern] : 3'd0;
         o_blu_video <= i_visible? pattern_blu[i_pattern] : 3'd0;

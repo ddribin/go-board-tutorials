@@ -4,6 +4,12 @@
 
 add_file -verilog -lib work "../VGA_Top.v" 
 add_file -verilog -lib work "../Video_Sync_Generator.v" 
+add_file -verilog -lib work "../FIFO.v" 
+add_file -verilog -lib work "../Nibble_To_7SD.v" 
+add_file -verilog -lib work "../Synchronizer.v" 
+add_file -verilog -lib work "../Test_Pattern_Generator.v" 
+add_file -verilog -lib work "../UART_Receiver.v" 
+add_file -verilog -lib work "../UART_Transmitter.v" 
 #implementation: "vga_Implmnt"
 impl -add vga_Implmnt -type fpga
 
