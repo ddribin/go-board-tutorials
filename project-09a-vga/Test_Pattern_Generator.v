@@ -10,6 +10,7 @@ module Test_Pattern_Generator #(
   input [9:0]   i_hpos,
   input [9:0]   i_vpos,
   input         i_visible,
+  input         i_frame_strobe,
 
   output reg [2:0] o_red_video,
   output reg [2:0] o_grn_video,
@@ -49,7 +50,7 @@ module Test_Pattern_Generator #(
   assign pattern_blu[3] = {3{1'b1}};
 
   /////////////////////////////////////////////////////////////////////////////
-  // Pattern 4: Color bars
+  // Pattern 4: Vertical color bars
   /////////////////////////////////////////////////////////////////////////////
   localparam BAR_WIDTH = H_VISIBLE/8;
   wire [2:0] w_bar =
@@ -69,7 +70,7 @@ module Test_Pattern_Generator #(
   /////////////////////////////////////////////////////////////////////////////
   // Pattern 5: Black with white border
   /////////////////////////////////////////////////////////////////////////////
-  localparam BORDER_WIDTH = 2;
+  localparam BORDER_WIDTH = 8;
   wire [2:0] w_border =
     ((i_hpos < BORDER_WIDTH) || (i_hpos > (H_VISIBLE - BORDER_WIDTH - 1)) ||
      (i_vpos < BORDER_WIDTH) || (i_vpos > (V_VISIBLE - BORDER_WIDTH - 1))) ? 3'd3 : 3'd0;
@@ -85,22 +86,47 @@ module Test_Pattern_Generator #(
   assign pattern_blu[6] = {3{i_hpos[4]}};
 
   /////////////////////////////////////////////////////////////////////////////
+  // Pattern 7: Scrolling horizontal color bars
+  /////////////////////////////////////////////////////////////////////////////
+  localparam V_BAR_HEIGHT = V_VISIBLE/8;
+  reg [9:0] r_frame_count;
+  always @(posedge i_clk) begin
+    if (i_frame_strobe) begin
+      if (r_frame_count == V_VISIBLE) begin
+        r_frame_count <= 0;
+      end else begin
+        r_frame_count <= r_frame_count + 1;
+      end
+    end
+  end
+  wire [10:0] w_fade_vpos = {1'b0,i_vpos} + {1'b0,r_frame_count};
+  wire [2:0] w_v_bar =
+    w_fade_vpos < V_BAR_HEIGHT*1 ? 3'd0 :
+    w_fade_vpos < V_BAR_HEIGHT*2 ? 3'd1 :
+    w_fade_vpos < V_BAR_HEIGHT*3 ? 3'd2 :
+    w_fade_vpos < V_BAR_HEIGHT*4 ? 3'd3 :
+    w_fade_vpos < V_BAR_HEIGHT*5 ? 3'd4 :
+    w_fade_vpos < V_BAR_HEIGHT*6 ? 3'd5 :
+    w_fade_vpos < V_BAR_HEIGHT*7 ? 3'd6 :
+    w_fade_vpos < V_BAR_HEIGHT*8 ? 3'd7 : 3'd0;
+  
+  assign pattern_red[7] = {3{w_v_bar[1]}};
+  assign pattern_grn[7] = {3{w_v_bar[2]}};
+  assign pattern_blu[7] = {3{w_v_bar[0]}};
+
+  /////////////////////////////////////////////////////////////////////////////
   // Select between different test patterns
   /////////////////////////////////////////////////////////////////////////////
   always @(posedge i_clk) begin
-    case (i_pattern)
-      4'd1, 4'd2, 4'd3, 4'd4, 4'd5, 4'd6: begin
-        o_red_video <= i_visible? pattern_red[i_pattern] : 3'd0;
-        o_grn_video <= i_visible? pattern_grn[i_pattern] : 3'd0;
-        o_blu_video <= i_visible? pattern_blu[i_pattern] : 3'd0;
-      end
-      default: begin
-        o_red_video <= pattern_red[0];
-        o_grn_video <= pattern_grn[0];
-        o_blu_video <= pattern_blu[0];
-      end
-
-    endcase
+    if (i_pattern <= 4'd7) begin
+      o_red_video <= i_visible? pattern_red[i_pattern] : 3'd0;
+      o_grn_video <= i_visible? pattern_grn[i_pattern] : 3'd0;
+      o_blu_video <= i_visible? pattern_blu[i_pattern] : 3'd0;
+    end else begin
+      o_red_video <= pattern_red[0];
+      o_grn_video <= pattern_grn[0];
+      o_blu_video <= pattern_blu[0];
+    end
   end
   
 endmodule

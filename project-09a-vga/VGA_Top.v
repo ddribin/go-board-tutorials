@@ -118,11 +118,18 @@ module VGA_Top (
     .o_visible(w_visible)
   );
 
-  reg [3:0] r_pattern;
+  reg [7:0] r_vblank_byte;
   always @(posedge i_Clk) begin
     if (w_vblank) begin
-      r_pattern <= r_rx_byte[3:0];
+      r_vblank_byte <= r_rx_byte;
     end
+  end
+
+  reg r_vblank;
+  reg r_vblank_strobe;  
+  always @(posedge i_Clk) begin
+    r_vblank <= w_vblank;
+    r_vblank_strobe <= w_vblank == 1'b1 && r_vblank == 1'b0;
   end
 
   wire [2:0] w_red;
@@ -130,10 +137,11 @@ module VGA_Top (
   wire [2:0] w_blu;
   Test_Pattern_Generator test_pattern (
     .i_clk(i_Clk),
-    .i_pattern(r_pattern),
+    .i_pattern(r_vblank_byte[3:0]),
     .i_hpos(w_hpos),
     .i_vpos(w_vpos),
     .i_visible(w_visible),
+    .i_frame_strobe(r_vblank_strobe),
     .o_red_video(w_red),
     .o_grn_video(w_grn),
     .o_blu_video(w_blu)
@@ -142,14 +150,14 @@ module VGA_Top (
   wire [6:0] w_Segments1;
   Nibble_To_7SD Segment1 (
     .i_Clk(i_Clk),
-    .i_Nibble(r_rx_byte[7:4]),
+    .i_Nibble(r_vblank_byte[7:4]),
     .o_Segments(w_Segments1)
   );
 
   wire [6:0] w_Segments2;
   Nibble_To_7SD Segment2 (
     .i_Clk(i_Clk),
-    .i_Nibble(r_rx_byte[3:0]),
+    .i_Nibble(r_vblank_byte[3:0]),
     .o_Segments(w_Segments2)
   );
 
