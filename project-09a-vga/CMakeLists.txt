@@ -12,6 +12,7 @@ add_subdirectory(../verilatest verilatest)
 
 set(TRACE_ENABLED 1)
 verilate(${PROJECT_NAME}-library SOURCES Video_Sync_Generator_tb.v TRACE $TRACE_ENABLED)
+verilate(${PROJECT_NAME}-library SOURCES Test_Pattern_Generator.v TRACE $TRACE_ENABLED)
 verilate(${PROJECT_NAME}-library SOURCES VGA_Top.v TRACE $TRACE_ENABLED)
 
 find_package(Catch2 REQUIRED)

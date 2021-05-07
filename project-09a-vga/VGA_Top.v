@@ -1,3 +1,5 @@
+`default_nettype none
+
 module VGA_Top (
    input  i_Clk,       // Main Clock
    input  i_UART_RX,   // UART RX Data
