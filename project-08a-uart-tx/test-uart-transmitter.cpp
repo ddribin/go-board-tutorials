@@ -9,17 +9,14 @@ struct VUART_Transmitter_Adapter : public VUART_Transmitter_tb
 using UUT = VUART_Transmitter_Adapter;
 
 struct UARTTransmitterFixture : TestFixture<UUT> {
-    Input8 transmitByte;
-    Input8 transmitValid;
-    Output8 transmitSerial;
-    Output8 transmitActive;
-    Output8 transmitDone;
+    Input8 transmitByte, transmitValid;
+    Output8 transmitSerial, transmitActive, transmitDone;
     UARTTransmitterFixture() :
-        transmitByte(&UUT::i_tx_byte, bench),
-        transmitValid(&UUT::i_tx_dv, bench),
-        transmitSerial(&UUT::o_tx_serial, bench),
-        transmitActive(&UUT::o_tx_active, bench),
-        transmitDone(&UUT::o_tx_done, bench)
+        transmitByte(makeInput(&UUT::i_tx_byte)),
+        transmitValid(makeInput(&UUT::i_tx_dv)),
+        transmitSerial(makeOutput(&UUT::o_tx_serial)),
+        transmitActive(makeOutput(&UUT::o_tx_active)),
+        transmitDone(makeOutput(&UUT::o_tx_done))
     {
     }
 };
