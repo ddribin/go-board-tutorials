@@ -89,38 +89,18 @@ module Test_Pattern_Generator #(
   // Pattern 7: Scrolling horizontal color bars
   /////////////////////////////////////////////////////////////////////////////
   localparam V_BAR_HEIGHT = V_VISIBLE/8;
-  reg [9:0] r_frame_count;
+  reg [6:0] r_frame_count;
   always @(posedge i_clk) begin
     if (i_frame_strobe) begin
-      if (r_frame_count == V_VISIBLE) begin
-        r_frame_count <= 0;
-      end else begin
-        r_frame_count <= r_frame_count + 1;
-      end
+      r_frame_count <= r_frame_count + 2;
     end
   end
-  wire [10:0] w_fade_vpos = {1'b0,i_vpos} + {1'b0,r_frame_count};
-  wire [2:0] w_v_bar =
-    w_fade_vpos < V_BAR_HEIGHT*1 ? 3'd0 :
-    w_fade_vpos < V_BAR_HEIGHT*2 ? 3'd1 :
-    w_fade_vpos < V_BAR_HEIGHT*3 ? 3'd2 :
-    w_fade_vpos < V_BAR_HEIGHT*4 ? 3'd3 :
-    w_fade_vpos < V_BAR_HEIGHT*5 ? 3'd4 :
-    w_fade_vpos < V_BAR_HEIGHT*6 ? 3'd5 :
-    w_fade_vpos < V_BAR_HEIGHT*7 ? 3'd6 :
-    w_fade_vpos < V_BAR_HEIGHT*8 ? 3'd7 :
-    w_fade_vpos < V_BAR_HEIGHT*9 ? 3'd0 :
-    w_fade_vpos < V_BAR_HEIGHT*10 ? 3'd1 :
-    w_fade_vpos < V_BAR_HEIGHT*11 ? 3'd2 :
-    w_fade_vpos < V_BAR_HEIGHT*12 ? 3'd3 :
-    w_fade_vpos < V_BAR_HEIGHT*13 ? 3'd4 :
-    w_fade_vpos < V_BAR_HEIGHT*14 ? 3'd5 :
-    w_fade_vpos < V_BAR_HEIGHT*15 ? 3'd6 :
-    w_fade_vpos < V_BAR_HEIGHT*16 ? 3'd7 : 3'd0;
-  
-  assign pattern_red[7] = {3{w_v_bar[1]}};
-  assign pattern_grn[7] = {3{w_v_bar[2]}};
-  assign pattern_blu[7] = {3{w_v_bar[0]}};
+
+  wire [10:0] w_fade_vpos = {1'b0,i_vpos} + {4'b0,r_frame_count};
+  wire [2:0] w_fade_intensity = w_fade_vpos[3:1];
+  assign pattern_red[7] = w_fade_vpos[5] ? w_fade_intensity : 0;
+  assign pattern_grn[7] = w_fade_vpos[6] ? w_fade_intensity : 0;
+  assign pattern_blu[7] = w_fade_vpos[4] ? w_fade_intensity : 0;
 
   /////////////////////////////////////////////////////////////////////////////
   // Select between different test patterns
