@@ -108,7 +108,15 @@ module Test_Pattern_Generator #(
     w_fade_vpos < V_BAR_HEIGHT*5 ? 3'd4 :
     w_fade_vpos < V_BAR_HEIGHT*6 ? 3'd5 :
     w_fade_vpos < V_BAR_HEIGHT*7 ? 3'd6 :
-    w_fade_vpos < V_BAR_HEIGHT*8 ? 3'd7 : 3'd0;
+    w_fade_vpos < V_BAR_HEIGHT*8 ? 3'd7 :
+    w_fade_vpos < V_BAR_HEIGHT*9 ? 3'd0 :
+    w_fade_vpos < V_BAR_HEIGHT*10 ? 3'd1 :
+    w_fade_vpos < V_BAR_HEIGHT*11 ? 3'd2 :
+    w_fade_vpos < V_BAR_HEIGHT*12 ? 3'd3 :
+    w_fade_vpos < V_BAR_HEIGHT*13 ? 3'd4 :
+    w_fade_vpos < V_BAR_HEIGHT*14 ? 3'd5 :
+    w_fade_vpos < V_BAR_HEIGHT*15 ? 3'd6 :
+    w_fade_vpos < V_BAR_HEIGHT*16 ? 3'd7 : 3'd0;
   
   assign pattern_red[7] = {3{w_v_bar[1]}};
   assign pattern_grn[7] = {3{w_v_bar[2]}};
