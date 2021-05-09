@@ -10,6 +10,7 @@ add_file -verilog -lib work "../Synchronizer.v"
 add_file -verilog -lib work "../Test_Pattern_Generator.v" 
 add_file -verilog -lib work "../UART_Receiver.v" 
 add_file -verilog -lib work "../UART_Transmitter.v" 
+add_file -verilog -lib work "../Nyan_Palette.v" 
 #implementation: "vga_Implmnt"
 impl -add vga_Implmnt -type fpga
 
