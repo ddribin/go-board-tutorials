@@ -102,11 +102,42 @@ module Test_Pattern_Generator #(
   assign pattern_grn[7] = w_fade_vpos[6] ? w_fade_intensity : 0;
   assign pattern_blu[7] = w_fade_vpos[4] ? w_fade_intensity : 0;
 
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Pattern 8: Nyan Cat
+  /////////////////////////////////////////////////////////////////////////////
+  reg [8:0] nyan_color;
+  always@(*) begin
+    case(nyan_index)
+      4'd0: nyan_color = 9'h000;
+      4'd1: nyan_color = 9'h00B;
+      4'd2: nyan_color = 9'h027;
+      4'd3: nyan_color = 9'h078;
+      4'd4: nyan_color = 9'h0CF;
+      4'd5: nyan_color = 9'h124;
+      4'd6: nyan_color = 9'h1C0;
+      4'd7: nyan_color = 9'h1CC;
+      4'd8: nyan_color = 9'h1E0;
+      4'd9: nyan_color = 9'h1E4;
+      4'd10: nyan_color = 9'h1E7;
+      4'd11: nyan_color = 9'h1F4;
+      4'd12: nyan_color = 9'h1F8;
+      4'd13: nyan_color = 9'h1FF;
+      4'd14: nyan_color = 9'h000;
+      4'd15: nyan_color = 9'h000;
+    endcase
+  end
+    
+  wire [3:0] nyan_index = i_vpos[7:4];
+  assign pattern_red[8] = nyan_color[8:6];
+  assign pattern_grn[8] = nyan_color[5:3];
+  assign pattern_blu[8] = nyan_color[2:0];
+
   /////////////////////////////////////////////////////////////////////////////
   // Select between different test patterns
   /////////////////////////////////////////////////////////////////////////////
   always @(posedge i_clk) begin
-    if (i_pattern <= 4'd7) begin
+    if (i_pattern <= 4'd8) begin
       o_red_video <= i_visible? pattern_red[i_pattern] : 3'd0;
       o_grn_video <= i_visible? pattern_grn[i_pattern] : 3'd0;
       o_blu_video <= i_visible? pattern_blu[i_pattern] : 3'd0;
