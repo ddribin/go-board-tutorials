@@ -112,11 +112,11 @@ module Test_Pattern_Generator #(
   Nyan_Palette nyan_palette (.i_index(nyan_index), .o_color(nyan_color));
   wire [3:0] pixel_data;
   ram ram (
-    .clk(i_clk),
-    .addr(w_addr),
-    .din(4'd0),
-    .write_en(1'b0),
-    .dout(pixel_data)
+    .i_clk(i_clk),
+    .i_addr(w_addr),
+    .i_data(4'd0),
+    .i_write_en(1'b0),
+    .o_data(pixel_data)
   );
 
   // wire [3:0] RDATA_c = pixel_data;
