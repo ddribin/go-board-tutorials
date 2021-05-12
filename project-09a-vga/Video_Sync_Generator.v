@@ -1,4 +1,4 @@
-`default_nettype none
+// `default_nettype none
 
 module Video_Sync_Generator #(
   // 640 x 480 at 60 Hz (non-interlaced)

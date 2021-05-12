@@ -1,4 +1,4 @@
-`default_nettype none
+// `default_nettype none
 
 module Nyan_Palette (
   input [3:0] i_index,

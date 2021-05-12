@@ -1,4 +1,4 @@
-`default_nettype none
+// `default_nettype none
 
 module Test_Pattern_Generator #(
   parameter VIDEO_WIDTH = 3,
@@ -92,7 +92,7 @@ module Test_Pattern_Generator #(
   reg [6:0] r_frame_count;
   always @(posedge i_clk) begin
     if (i_frame_strobe) begin
-      r_frame_count <= r_frame_count + 2;
+      r_frame_count <= r_frame_count + 1;
     end
   end
 
@@ -106,13 +106,64 @@ module Test_Pattern_Generator #(
   /////////////////////////////////////////////////////////////////////////////
   // Pattern 8: Nyan Cat
   /////////////////////////////////////////////////////////////////////////////
+  wire [9:0] w_addr = {1'd0, {i_vpos[9:1]}};
   wire [8:0] nyan_color;
-  wire [3:0] nyan_index = i_vpos[7:4];
+  wire [3:0] nyan_index = pixel_data; // i_vpos[7:4];
   Nyan_Palette nyan_palette (.i_index(nyan_index), .o_color(nyan_color));
-  
+  wire [3:0] pixel_data;
+  ram ram (
+    .clk(i_clk),
+    .addr(w_addr),
+    .din(4'd0),
+    .write_en(1'b0),
+    .dout(pixel_data)
+  );
+
+  // wire [3:0] RDATA_c = pixel_data;
+  // wire [9:0] RADDR_c = i_hpos;
+  // wire RCLK_c = i_clk;
+  // wire RCLKE_c = 1;
+  // wire RE_c = 1;
+  // wire [9:0] WADDR_c = 0;
+  // wire WCLK_c = i_clk;
+  // wire WCLKE_c = 1;
+  // wire [3:0] WDATA_c;
+  // wire WE_c = 0;
+  // SB_RAM1024x4 ram1024x4_inst (
+  //   .RDATA(RDATA_c[3:0]),
+  //   .RADDR(RADDR_c[9:0]),
+  //   .RCLK(RCLK_c),
+  //   .RCLKE(RCLKE_c),
+  //   .RE(RE_c),
+  //   .WADDR(WADDR_c[9:0]),
+  //   .WCLK(WCLK_c),
+  //   .WCLKE(WCLKE_c),
+  //   .WDATA(WDATA_c[3:0]),
+  //   .WE(WE_c)
+  // );
+  // defparam ram1024x4_inst.INIT_0 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_1 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_2 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_3 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_4 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_5 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_6 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_7 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_8 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_9 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_A = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_B = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_C = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_D = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_E = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+  // defparam ram1024x4_inst.INIT_F = 256'h0000000000000000000000000000000000000000000000000000000000000000;
+
   assign pattern_red[8] = nyan_color[8:6];
   assign pattern_grn[8] = nyan_color[5:3];
   assign pattern_blu[8] = nyan_color[2:0];
+  // assign pattern_red[8] = {3{pixel_data[0]}};
+  // assign pattern_grn[8] = {3{pixel_data[1]}};
+  // assign pattern_blu[8] = {3{pixel_data[2]}};
 
   /////////////////////////////////////////////////////////////////////////////
   // Select between different test patterns

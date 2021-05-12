@@ -4,7 +4,7 @@ Version=Lattice Semiconductor Corporation iCEcube - Release: 2020.12.27943 - Bui
 ProjectName=vga
 Vendor=SiliconBlue
 Synthesis=synplify
-ProjectVFiles=../VGA_Top.v=work,../Video_Sync_Generator.v=work,../FIFO.v=work,../Nibble_To_7SD.v=work,../Synchronizer.v=work,../Test_Pattern_Generator.v=work,../UART_Receiver.v=work,../UART_Transmitter.v=work,../Nyan_Palette.v
+ProjectVFiles=../VGA_Top.v=work,../Video_Sync_Generator.v=work,../FIFO.v=work,../Nibble_To_7SD.v=work,../Synchronizer.v=work,../Test_Pattern_Generator.v=work,../UART_Receiver.v=work,../UART_Transmitter.v=work,../Nyan_Palette.v=work,../ram.v=work
 ProjectCFiles=
 CurImplementation=vga_Implmnt
 Implementations=vga_Implmnt
@@ -67,7 +67,7 @@ NetlistFile=vga_Implmnt/vga.edf
 AdditionalEDIFFile=
 IPEDIFFile=
 DesignLib=vga_Implmnt/sbt/netlist/oadb-VGA_Top
-DesignView=_rt
+DesignView=_pl
 DesignCell=VGA_Top
 SynthesisSDCFile=vga_Implmnt/vga.scf
 UserPinConstraintFile=
