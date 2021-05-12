@@ -106,7 +106,7 @@ module Test_Pattern_Generator #(
   /////////////////////////////////////////////////////////////////////////////
   // Pattern 8: Nyan Cat
   /////////////////////////////////////////////////////////////////////////////
-  wire [9:0] w_addr = {1'd0, {i_vpos[9:1]}};
+  wire [9:0] w_addr = {2'd0, {i_vpos[9:2]}};
   wire [8:0] nyan_color;
   wire [3:0] nyan_index = pixel_data; // i_vpos[7:4];
   Nyan_Palette nyan_palette (.i_index(nyan_index), .o_color(nyan_color));

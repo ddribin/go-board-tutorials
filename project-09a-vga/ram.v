@@ -17,7 +17,7 @@ module ram #(
     if (i_write_en) begin
       r_mem[i_addr] <= i_data;
     end
-    o_data = r_mem[i_addr];
+    o_data <= r_mem[i_addr];
   end
 
   initial begin
