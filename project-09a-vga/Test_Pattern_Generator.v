@@ -129,10 +129,35 @@ module Test_Pattern_Generator #(
   assign pattern_blu[8] = b1_color[2:0];
 
   /////////////////////////////////////////////////////////////////////////////
+  // Pattern 9: Bitmap 1. A 64x64 image with a 16 color (4-bit) palette
+  /////////////////////////////////////////////////////////////////////////////
+  wire [10:0] w_b2_vpos = {1'b0,i_vpos};
+  wire [10:0] w_b2_hpos = {1'b0,i_hpos};
+  wire [11:0] w_b2_addr = { {w_b2_vpos[6:1]}, {w_b1_hpos[6:1]} };
+  wire [8:0] b2_color;
+  wire [3:0] b2_index;
+  bitmap2_palette b2_palette (.i_index(b2_index), .o_color(b2_color));
+  ram #(
+    .ADDR_WIDTH(12),  // log2(64*64)
+    .DATA_WIDTH(4),   // Palette index
+    .FILE("bitmap2_pixels.txt"))
+     b2_ram (
+    .i_clk(i_clk),
+    .i_addr(w_b2_addr),
+    .i_data(4'd0),
+    .i_write_en(1'b0),
+    .o_data(b2_index)
+  );
+
+  assign pattern_red[9] = b2_color[8:6];
+  assign pattern_grn[9] = b2_color[5:3];
+  assign pattern_blu[9] = b2_color[2:0];
+
+  /////////////////////////////////////////////////////////////////////////////
   // Select between different test patterns
   /////////////////////////////////////////////////////////////////////////////
   always @(posedge i_clk) begin
-    if (i_pattern <= 4'd8) begin
+    if (i_pattern <= 4'd9) begin
       o_red_video <= i_visible? pattern_red[i_pattern] : 3'd0;
       o_grn_video <= i_visible? pattern_grn[i_pattern] : 3'd0;
       o_blu_video <= i_visible? pattern_blu[i_pattern] : 3'd0;
