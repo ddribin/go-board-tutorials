@@ -2,7 +2,8 @@
 
 module ram #(
   parameter ADDR_WIDTH = 10,
-  parameter DATA_WIDTH = 4
+  parameter DATA_WIDTH = 4,
+  parameter FILE = ""
 ) (
   input  wire i_clk,
   input  wire [DATA_WIDTH-1:0] i_data,
@@ -21,6 +22,9 @@ module ram #(
   end
 
   initial begin
-    $readmemh("foo.txt", r_mem);
+    if (FILE != 0) begin
+      $display("Initializing from file '%s'.", FILE);
+      $readmemh(FILE, r_mem);
+    end
   end
 endmodule

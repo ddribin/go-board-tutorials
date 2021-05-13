@@ -104,24 +104,29 @@ module Test_Pattern_Generator #(
 
 
   /////////////////////////////////////////////////////////////////////////////
-  // Pattern 8: Nyan Cat
+  // Pattern 8: Bitmap 1. A 32x32 image with a 16 color (4-bit) palette
   /////////////////////////////////////////////////////////////////////////////
-  wire [9:0] w_addr = {2'd0, {i_vpos[9:2]}};
-  wire [8:0] nyan_color;
-  wire [3:0] nyan_index = pixel_data;
-  Nyan_Palette nyan_palette (.i_index(nyan_index), .o_color(nyan_color));
-  wire [3:0] pixel_data;
-  ram ram (
+  wire [10:0] w_b1_vpos = {1'b0,i_vpos} - {4'b0,r_frame_count};
+  wire [10:0] w_b1_hpos = {1'b0,i_hpos} - {4'b0,r_frame_count};
+  wire [9:0] w_b1_addr = { {w_b1_vpos[6:2]}, {w_b1_hpos[6:2]} };
+  wire [8:0] b1_color;
+  wire [3:0] b1_index;
+  bitmap1_palette b1_palette (.i_index(b1_index), .o_color(b1_color));
+  ram #(
+    .ADDR_WIDTH(10),  // log2(32*32)
+    .DATA_WIDTH(4),   // Palette index
+    .FILE("bitmap1_pixels.txt"))
+     b1_ram (
     .i_clk(i_clk),
-    .i_addr(w_addr),
+    .i_addr(w_b1_addr),
     .i_data(4'd0),
     .i_write_en(1'b0),
-    .o_data(pixel_data)
+    .o_data(b1_index)
   );
 
-  assign pattern_red[8] = nyan_color[8:6];
-  assign pattern_grn[8] = nyan_color[5:3];
-  assign pattern_blu[8] = nyan_color[2:0];
+  assign pattern_red[8] = b1_color[8:6];
+  assign pattern_grn[8] = b1_color[5:3];
+  assign pattern_blu[8] = b1_color[2:0];
 
   /////////////////////////////////////////////////////////////////////////////
   // Select between different test patterns
