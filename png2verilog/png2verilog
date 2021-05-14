@@ -1,0 +1,107 @@
+#!/usr/bin/env ruby
+
+require 'chunky_png'
+require 'set'
+require 'pp'
+require 'stringio'
+
+
+def rgba8888_to_rgb333(rgba8888)
+  r8 = ChunkyPNG::Color.r(rgba8888)
+  g8 = ChunkyPNG::Color.g(rgba8888)
+  b8 = ChunkyPNG::Color.b(rgba8888)
+  r3 = r8 >> 5
+  g3 = g8 >> 5
+  b3 = b8 >> 5
+  rgb333 = (r3 << 6) | (g3 << 3) | b3
+  # s = sprintf("%03X", rgb333)
+  # return s
+  return rgb333
+end
+
+class Palette < Object
+  attr_reader :colors
+
+  def self.from_image(image)
+    colorSet = Set.new
+    image.pixels.each { |p| colorSet.add(p) }
+    return Palette.new(colorSet.to_a.sort)
+  end
+
+  def initialize(colors)
+    @colors = colors
+    @color_hash = Hash[colors.collect.with_index { |c,i| [c,i] }]
+  end
+
+  def index_of(color)
+    return @color_hash[color]
+  end
+
+  def to_s
+    io = StringIO.new
+    print(io)
+    return io.string
+  end
+
+  def print(ios=$stdout)
+    self.colors.each.with_index do |c, i|
+      ios.printf "%02d %X: 0x%08X 0x%03X\n", i, i, c, rgba8888_to_rgb333(c)
+    end
+  end
+
+  def to_verilog_case(module_prefix = "", ios = $stdout)
+    module_name = [module_prefix, "palette"].join("_")
+    index_name = "i_index"
+    color_name = "o_color"
+    ios.puts "module #{module_name} ("
+    ios.puts "  input  wire [3:0] #{index_name},"
+    ios.puts "  output reg  [8:0] #{color_name}"
+    ios.puts ");" 
+    ios.puts ""
+    ios.puts "  always @(*) begin"
+    ios.puts "    case(#{index_name})"
+    colors.each.with_index do |c, i|
+      color = rgba8888_to_rgb333(c || 0)
+      ios.printf "      4'h%X: %s = 9'h%03X;\n", i, color_name, color
+    end
+    ios.puts "      default: #{color_name} = 9'h000;"
+    ios.puts "    endcase"
+    ios.puts "  end"
+    ios.puts "endmodule"
+  end
+
+  def to_verilog_array_string
+    puts "  reg [8:0] nyan_palette[3:0];"
+    puts "  initial begin"
+    (0..15).each do |i|
+      color = rgba8888_to_rgb333(@colors[i] || 0)
+      printf "    nyan_palette[%02d] = 9'h%03X;\n", i, color
+    end
+    puts "  end"
+  end
+end
+
+def image_to_pixels(image, palette, ios=$stdout)
+  dim = image.dimension
+  for y in 0..(dim.height-1)
+    line = ""
+    pixels = []
+    for x in 0..(dim.width-1)
+      color = image.get_pixel(x,y)
+      index = palette.index_of(color)
+      pixels.push(index)
+    end
+    pixels = pixels.map { |index| sprintf "%X", index }
+    puts pixels.join(" ")
+  end
+end
+
+colors = {}
+input = ARGV[0]
+prefix = ARGV[1] || File.basename(input, ".*")
+image = ChunkyPNG::Image.from_file(input)
+palette = Palette.from_image(image)
+palette.print
+puts
+puts palette.to_verilog_case(prefix=prefix)
+image_to_pixels(image, palette)
