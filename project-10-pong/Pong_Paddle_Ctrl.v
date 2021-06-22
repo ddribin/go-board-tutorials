@@ -52,7 +52,7 @@ module Pong_Paddle_Ctrl
   begin
     // Draws in a single column and in a range of rows.
     // Range of rows is determined by c_PADDLE_HEIGHT
-    if (i_Col_Count_Div == c_PLAYER_PADDLE_X &&
+    if (i_Col_Count_Div == c_PLAYER_PADDLE_X[5:0] &&
         i_Row_Count_Div >= o_Paddle_Y &&
         i_Row_Count_Div <= o_Paddle_Y + c_PADDLE_HEIGHT)
       o_Draw_Paddle <= 1'b1;

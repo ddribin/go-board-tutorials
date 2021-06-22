@@ -1,3 +1,4 @@
+/* verilator lint_off IMPLICIT */
 module Pong_Top
   #(parameter c_TOTAL_COLS=800,
     parameter c_TOTAL_ROWS=525,
@@ -110,6 +111,7 @@ module Pong_Top
   // Create a state machine to control the state of play
   always @(posedge i_Clk)
   begin
+    /* verilator lint_off CASEINCOMPLETE */
     case (r_SM_Main)
  
     // Stay in this state until Game Start button is hit

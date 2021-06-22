@@ -1,6 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////
 // File Downloaded From http://www.nandland.com
 ///////////////////////////////////////////////////////////////////////////
+/* verilator lint_off IMPLICIT */
 module Project10_Pong_Top
   (input  i_Clk,       // Main Clock
    input  i_UART_RX, // UART RX Data
@@ -26,7 +27,7 @@ module Project10_Pong_Top
    );
     
   // VGA Constants to set Frame Size
-  parameter c_VIDEO_WIDTH = 3;
+  parameter c_VIDEO_WIDTH = 4;
   parameter c_TOTAL_COLS  = 800;
   parameter c_TOTAL_ROWS  = 525;
   parameter c_ACTIVE_COLS = 640;
